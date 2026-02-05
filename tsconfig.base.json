@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": false,
+
+    /* Type Checking */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+
+    /* Module Resolution Options */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+
+    /* Declaration Options */
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+
+    /* Path Mapping */
+    "baseUrl": ".",
+    "paths": {
+      "@pas7/request-context-core": ["./packages/core/src"],
+      "@pas7/nestjs-request-context": ["./packages/nest/src"],
+      "@pas7/nestjs-request-context-adapter-fastify": ["./packages/adapter-fastify/src"],
+      "@pas7/nestjs-request-context-adapter-express": ["./packages/adapter-express/src"],
+      "@pas7/nestjs-request-context-testkit": ["./packages/testkit/src"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+}

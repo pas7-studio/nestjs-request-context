@@ -1,0 +1,62 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+*.tsbuildinfo
+*.local
+
+# TypeScript
+*.tsbuildinfo
+*.d.ts.map
+*.js.map
+
+# Test coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+.cache/
+.temp/
+bash.exe.stackdump
+
+# Package managers
+.yarn-integrity
+
+# Changesets
+.changeset/*.md
+
+# Build tools cache
+.tsup/
+.vitest/
+
+# Lock files (uncomment if you don't want to commit them)
+# pnpm-lock.yaml
+# package-lock.json

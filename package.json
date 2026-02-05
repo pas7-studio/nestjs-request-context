@@ -1,0 +1,61 @@
+{
+  "name": "@pas7/nestjs-request-context-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Zero-overhead request context management for NestJS without request-scoped providers using AsyncLocalStorage",
+  "keywords": [
+    "nestjs",
+    "request-context",
+    "asynclocalstorage",
+    "async-local-storage",
+    "nestjs-request-context",
+    "context-management",
+    "request-scoped-alternative",
+    "zero-overhead",
+    "performance",
+    "typescript",
+    "nestjs-module",
+    "express",
+    "fastify",
+    "distributed-tracing",
+    "microservices",
+    "observability"
+  ],
+  "homepage": "https://github.com/pas7-studio/nestjs-request-context",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pas7-studio/nestjs-request-context.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pas7-studio/nestjs-request-context/issues"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@types/node": "^22.10.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
+    "tsup": "^8.3.0",
+    "typescript": "^5.5.4",
+    "vitest": "^2.1.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.12.1"
+}
