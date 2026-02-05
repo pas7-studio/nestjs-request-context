@@ -37,7 +37,10 @@ describe('requestContextMiddleware', () => {
       res.json({ requestId });
     });
 
-    const response = await request(app).get('/test').set('x-request-id', customRequestId).expect(200);
+    const response = await request(app)
+      .get('/test')
+      .set('x-request-id', customRequestId)
+      .expect(200);
 
     expect(response.body.requestId).toBe(customRequestId);
   });
