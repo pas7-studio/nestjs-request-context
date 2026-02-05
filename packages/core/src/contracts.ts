@@ -28,6 +28,4 @@ export type SetPolicy = 'deny' | 'overwrite' | 'ignore';
  * Store type for context data storage
  * Store without prototype: Object.create(null)
  */
-export type Store = {
-  readonly [key: string]: unknown;
-};
+export type Store = Record<string, unknown>;

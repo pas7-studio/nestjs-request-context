@@ -2,8 +2,9 @@
  * Tests for ContextGuard
  */
 
-import { ExecutionContext } from '@nestjs/common';
-import { Context, run } from '@pas7/request-context-core';
+import type { ExecutionContext } from '@nestjs/common';
+import { ForbiddenException } from '@nestjs/common';
+import { run } from '@pas7/request-context-core';
 import { ContextGuard } from './context.guard.js';
 
 describe('ContextGuard', () => {
@@ -30,7 +31,6 @@ describe('ContextGuard', () => {
     });
 
     it('should throw ForbiddenException when context is not active', () => {
-      const { ForbiddenException } = require('@nestjs/common');
       const context = createMockExecutionContext();
 
       expect(() => guard.canActivate(context)).toThrow(ForbiddenException);

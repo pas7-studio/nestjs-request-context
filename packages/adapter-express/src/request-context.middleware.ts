@@ -27,9 +27,7 @@ import type { RequestContextExpressOptions } from './config.js';
  * app.use(requestContextMiddleware());
  * ```
  */
-export function requestContextMiddleware(
-  options?: RequestContextExpressOptions,
-): RequestHandler {
+export function requestContextMiddleware(options?: RequestContextExpressOptions): RequestHandler {
   // Merge options with defaults (avoid allocations in hot path)
   const headerName = options?.header ?? 'x-request-id';
   const idGenerator = options?.idGenerator ?? (() => crypto.randomUUID());
@@ -38,9 +36,7 @@ export function requestContextMiddleware(
   return (req: Request, res: Response, next: NextFunction): void => {
     // Get request ID from header or generate new one
     const headers = req.headers as Record<string, string | string[] | undefined>;
-    const requestId = typeof headers[headerName] === 'string'
-      ? headers[headerName]
-      : idGenerator();
+    const requestId = typeof headers[headerName] === 'string' ? headers[headerName] : idGenerator();
 
     // Optionally add request ID to response headers
     if (addResponseHeader) {

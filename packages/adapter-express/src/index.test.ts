@@ -28,4 +28,3 @@ describe('Express Adapter Package Exports', () => {
     expect(typeof DEFAULT_EXPRESS_OPTIONS.idGenerator).toBe('function');
   });
 });
-

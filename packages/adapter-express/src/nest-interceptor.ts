@@ -2,8 +2,9 @@
  * NestJS interceptor for Express request context
  */
 
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import type { NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import type { Observable } from 'rxjs';
 import type { RequestContextExpressOptions } from './config.js';
 
 /**
@@ -34,7 +35,7 @@ import type { RequestContextExpressOptions } from './config.js';
  * ```
  */
 export function UseRequestContextExpress(
-  options?: RequestContextExpressOptions,
+  options?: RequestContextExpressOptions
 ): new () => NestInterceptor {
   @Injectable()
   class RequestContextInterceptor implements NestInterceptor {

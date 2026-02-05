@@ -21,7 +21,7 @@ import type { RequestContextFastifyOptions } from './config.js';
  */
 export async function requestContextPlugin(
   fastify: FastifyInstance,
-  options: RequestContextFastifyOptions = {},
+  options: RequestContextFastifyOptions = {}
 ): Promise<void> {
   // Merge options with defaults (avoid allocations in hot path)
   const headerName = options.header ?? 'x-request-id';
@@ -33,9 +33,7 @@ export async function requestContextPlugin(
   fastify.addHook('onRequest', async (request: FastifyRequest, reply: FastifyReply) => {
     // Get request ID from header or generate new one
     const headers = request.headers as Record<string, string | string[] | undefined>;
-    const requestId = typeof headers[headerName] === 'string'
-      ? headers[headerName]
-      : idGenerator();
+    const requestId = typeof headers[headerName] === 'string' ? headers[headerName] : idGenerator();
 
     // Optionally add request ID to response headers
     if (addResponseHeader) {
@@ -45,12 +43,9 @@ export async function requestContextPlugin(
     // Start request context and await route handler
     // By using async/await pattern, we maintain AsyncLocalStorage throughout
     // the entire request lifecycle including nested async operations
-    return run(
-      { requestId },
-      async () => {
-        // The route handler will be executed within this context
-        // Fastify will await the completion of all middleware and handlers
-      },
-    );
+    return run({ requestId }, async () => {
+      // The route handler will be executed within this context
+      // Fastify will await the completion of all middleware and handlers
+    });
   });
 }

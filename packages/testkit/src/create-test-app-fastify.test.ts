@@ -3,7 +3,7 @@
  */
 
 import 'reflect-metadata';
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import { Controller, Get } from '@nestjs/common';
 import { createTestAppFastify } from './create-test-app-fastify.js';
 import { Ctx, REQUEST_ID_KEY } from '@pas7/nestjs-request-context';
@@ -62,9 +62,7 @@ describe.skip('createTestAppFastify', () => {
         },
       });
 
-      const response = await request(result.app.getHttpServer())
-        .get('/test')
-        .expect(200);
+      const response = await request(result.app.getHttpServer()).get('/test').expect(200);
 
       expect(response.body.requestId).toBeDefined();
       expect(typeof response.body.requestId).toBe('string');
@@ -93,9 +91,7 @@ describe.skip('createTestAppFastify', () => {
         },
       });
 
-      const response = await request(result.app.getHttpServer())
-        .get('/test/async')
-        .expect(200);
+      const response = await request(result.app.getHttpServer()).get('/test/async').expect(200);
 
       expect(response.body.requestId).toBeDefined();
       expect(typeof response.body.requestId).toBe('string');
@@ -108,9 +104,7 @@ describe.skip('createTestAppFastify', () => {
         },
       });
 
-      const response = await request(result.app.getHttpServer())
-        .get('/test')
-        .expect(200);
+      const response = await request(result.app.getHttpServer()).get('/test').expect(200);
 
       expect(response.headers['x-request-id']).toBeDefined();
       expect(typeof response.headers['x-request-id']).toBe('string');
@@ -123,9 +117,7 @@ describe.skip('createTestAppFastify', () => {
         },
       });
 
-      const response = await request(result.app.getHttpServer())
-        .get('/test')
-        .expect(200);
+      const response = await request(result.app.getHttpServer()).get('/test').expect(200);
 
       expect(response.headers['x-request-id']).toBe(response.body.requestId);
     });

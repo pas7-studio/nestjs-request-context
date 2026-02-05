@@ -16,9 +16,7 @@ export const MODULE_OPTIONS = Symbol('MODULE_OPTIONS');
  */
 @Injectable()
 export class RequestContextService {
-  constructor(
-    @Inject(MODULE_OPTIONS) private readonly options: RequestContextModuleOptions,
-  ) {}
+  constructor(@Inject(MODULE_OPTIONS) private readonly options: RequestContextModuleOptions) {}
 
   /**
    * Get a value from the current context

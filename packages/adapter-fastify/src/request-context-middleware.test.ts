@@ -3,8 +3,6 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { get } from '@pas7/request-context-core';
-import { REQUEST_ID_KEY } from '@pas7/nestjs-request-context';
 import { requestContextMiddleware } from './request-context-middleware.js';
 
 describe('requestContextMiddleware (NestJS)', () => {

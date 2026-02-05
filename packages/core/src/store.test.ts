@@ -4,7 +4,6 @@
 
 import { describe, it, expect } from 'vitest';
 import { Store, createEmptyStore } from './store.js';
-import type { SetPolicy } from './contracts.js';
 
 describe('Store', () => {
   it('should create an empty store without prototype', () => {
@@ -91,7 +90,7 @@ describe('Store', () => {
     expect(store.get<number>('number')).toBe(42);
     expect(store.get<boolean>('boolean')).toBe(true);
     expect(store.get<object>('object')).toEqual({ nested: 'value' });
-    expect(store.get<Array<number>>('array')).toEqual([1, 2, 3]);
+    expect(store.get<number[]>('array')).toEqual([1, 2, 3]);
   });
 
   it('should work with empty merge', () => {

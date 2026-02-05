@@ -2,8 +2,9 @@
  * NestJS interceptor for Fastify request context
  */
 
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import type { NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import type { Observable } from 'rxjs';
 import type { RequestContextFastifyOptions } from './config.js';
 
 /**
@@ -19,7 +20,7 @@ import type { RequestContextFastifyOptions } from './config.js';
  * @returns A NestJS interceptor class
  */
 export function UseRequestContextFastify(
-  options?: RequestContextFastifyOptions,
+  options?: RequestContextFastifyOptions
 ): new () => NestInterceptor {
   @Injectable()
   class RequestContextInterceptor implements NestInterceptor {

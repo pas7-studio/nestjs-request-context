@@ -2,8 +2,9 @@
  * Create a test NestJS application with Express adapter and request context
  */
 
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import type { INestApplication } from '@nestjs/common';
 import type { ModuleMetadata } from '@nestjs/common';
 import { RequestContextModule } from '@pas7/nestjs-request-context';
 import type { RequestContextModuleOptions } from '@pas7/nestjs-request-context';
@@ -58,13 +59,9 @@ export interface CreateTestAppExpressResult {
  * @returns Promise with app, module and close function
  */
 export async function createTestAppExpress(
-  options: CreateTestAppExpressOptions = {},
+  options: CreateTestAppExpressOptions = {}
 ): Promise<CreateTestAppExpressResult> {
-  const {
-    module: moduleMetadata,
-    adapterOptions,
-    contextModuleOptions,
-  } = options;
+  const { module: moduleMetadata, adapterOptions, contextModuleOptions } = options;
 
   // Create testing module with RequestContextModule
   const moduleRef: TestingModule = await Test.createTestingModule({

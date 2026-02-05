@@ -11,6 +11,7 @@ import { ContextGuard } from './context.guard.js';
 /**
  * Module for managing request context in NestJS applications
  */
+/* eslint-disable @typescript-eslint/no-extraneous-class */
 @Module({})
 export class RequestContextModule {
   /**

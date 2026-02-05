@@ -3,10 +3,9 @@
  */
 
 import { Observable, of, lastValueFrom } from 'rxjs';
-import { ExecutionContext, CallHandler } from '@nestjs/common';
+import type { ExecutionContext, CallHandler } from '@nestjs/common';
 import { Context } from '@pas7/request-context-core';
 import { ContextInterceptor } from './context.interceptor.js';
-import { MODULE_OPTIONS } from './request-context.service.js';
 import type { RequestContextModuleOptions } from './config.js';
 
 describe('ContextInterceptor', () => {
@@ -25,7 +24,7 @@ describe('ContextInterceptor', () => {
     headers: Record<string, string | undefined> = {},
     url = '/test',
     method = 'GET',
-    routePath?: string,
+    routePath?: string
   ): ExecutionContext => {
     const request = {
       headers,
@@ -40,12 +39,6 @@ describe('ContextInterceptor', () => {
         getRequest: () => request,
       }),
     } as unknown as ExecutionContext;
-  };
-
-  const createMockCallHandler = (returnValue = { success: true }): CallHandler => {
-    return {
-      handle: () => of(returnValue),
-    };
   };
 
   describe('intercept', () => {
@@ -66,7 +59,7 @@ describe('ContextInterceptor', () => {
 
       const result$ = interceptor.intercept(context, next);
       const result = await lastValueFrom(result$);
-      
+
       expect(result).toEqual({ success: true });
     });
 
@@ -86,7 +79,7 @@ describe('ContextInterceptor', () => {
 
       const result$ = interceptor.intercept(context, next);
       const result = await lastValueFrom(result$);
-      
+
       expect(result).toEqual({ success: true });
     });
 
@@ -108,7 +101,7 @@ describe('ContextInterceptor', () => {
 
       const result$ = interceptor.intercept(context, next);
       const result = await lastValueFrom(result$);
-      
+
       expect(result).toEqual({ success: true });
     });
 
@@ -131,7 +124,7 @@ describe('ContextInterceptor', () => {
 
       const result$ = interceptor.intercept(context, next);
       const result = await lastValueFrom(result$);
-      
+
       expect(result).toEqual({ success: true });
     });
 
@@ -154,7 +147,7 @@ describe('ContextInterceptor', () => {
 
       const result$ = interceptor.intercept(context, next);
       const result = await lastValueFrom(result$);
-      
+
       expect(result).toEqual({ success: true });
     });
 
@@ -165,12 +158,7 @@ describe('ContextInterceptor', () => {
       });
 
       it('should enrich context with route in standard mode', async () => {
-        const context = createMockExecutionContext(
-          {},
-          '/test',
-          'GET',
-          '/test',
-        );
+        const context = createMockExecutionContext({}, '/test', 'GET', '/test');
 
         const next: CallHandler = {
           handle: () => {
@@ -183,7 +171,7 @@ describe('ContextInterceptor', () => {
 
         const result$ = interceptor.intercept(context, next);
         const result = await lastValueFrom(result$);
-        
+
         expect(result).toEqual({ success: true });
       });
 
@@ -201,7 +189,7 @@ describe('ContextInterceptor', () => {
 
         const result$ = interceptor.intercept(context, next);
         const result = await lastValueFrom(result$);
-        
+
         expect(result).toEqual({ success: true });
       });
 
@@ -212,12 +200,7 @@ describe('ContextInterceptor', () => {
         };
         interceptor = new ContextInterceptor(mockOptions);
 
-        const context = createMockExecutionContext(
-          {},
-          '/test',
-          'GET',
-          '/test',
-        );
+        const context = createMockExecutionContext({}, '/test', 'GET', '/test');
 
         const next: CallHandler = {
           handle: () => {
@@ -231,7 +214,7 @@ describe('ContextInterceptor', () => {
 
         const result$ = interceptor.intercept(context, next);
         const result = await lastValueFrom(result$);
-        
+
         expect(result).toEqual({ success: true });
       });
     });
@@ -243,12 +226,7 @@ describe('ContextInterceptor', () => {
       });
 
       it('should not enrich context with route in minimal mode', async () => {
-        const context = createMockExecutionContext(
-          {},
-          '/test',
-          'GET',
-          '/test',
-        );
+        const context = createMockExecutionContext({}, '/test', 'GET', '/test');
 
         const next: CallHandler = {
           handle: () => {
@@ -261,7 +239,7 @@ describe('ContextInterceptor', () => {
 
         const result$ = interceptor.intercept(context, next);
         const result = await lastValueFrom(result$);
-        
+
         expect(result).toEqual({ success: true });
       });
 
@@ -279,7 +257,7 @@ describe('ContextInterceptor', () => {
 
         const result$ = interceptor.intercept(context, next);
         const result = await lastValueFrom(result$);
-        
+
         expect(result).toEqual({ success: true });
       });
     });
@@ -302,7 +280,7 @@ describe('ContextInterceptor', () => {
 
         const result$ = interceptor.intercept(context, next);
         const result = await lastValueFrom(result$);
-        
+
         expect(result).toEqual({ success: true });
       });
 
@@ -320,7 +298,7 @@ describe('ContextInterceptor', () => {
 
         const result$ = interceptor.intercept(context, next);
         const result = await lastValueFrom(result$);
-        
+
         expect(result).toEqual({ success: true });
       });
     });
@@ -344,7 +322,7 @@ describe('ContextInterceptor', () => {
         };
 
         const result$ = interceptor.intercept(context, next);
-        
+
         await expect(lastValueFrom(result$)).rejects.toThrow('Test error');
       });
     });

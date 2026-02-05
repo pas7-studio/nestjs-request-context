@@ -35,10 +35,9 @@ export interface RequestContextModuleOptions {
 /**
  * Async configuration options for RequestContextModule with dependency injection
  */
-export interface RequestContextModuleAsyncOptions
-  extends Pick<ModuleMetadata, 'imports'> {
+export interface RequestContextModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
   /** Dependencies to inject into useFactory */
-  inject?: any[];
+  inject?: unknown[];
   /** Factory function to create configuration options */
   useFactory: (...args: unknown[]) => RequestContextModuleOptions;
 }

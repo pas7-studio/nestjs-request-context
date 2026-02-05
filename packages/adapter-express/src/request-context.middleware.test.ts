@@ -2,8 +2,8 @@
  * Tests for Express request context middleware
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import express, { type Express, type Request, type Response, type NextFunction } from 'express';
+import { describe, it, expect, beforeEach } from 'vitest';
+import express, { type Express } from 'express';
 import request from 'supertest';
 import { get } from '@pas7/request-context-core';
 import { REQUEST_ID_KEY } from '@pas7/nestjs-request-context';
@@ -18,7 +18,7 @@ describe('requestContextMiddleware', () => {
   });
 
   it('should start context on request', async () => {
-    app.get('/test', (req, res) => {
+    app.get('/test', (_req, res) => {
       const requestId = get(REQUEST_ID_KEY);
       res.json({ requestId });
     });
@@ -32,22 +32,19 @@ describe('requestContextMiddleware', () => {
   it('should use requestId from header if provided', async () => {
     const customRequestId = 'custom-123';
 
-    app.get('/test', (req, res) => {
+    app.get('/test', (_req, res) => {
       const requestId = get(REQUEST_ID_KEY);
       res.json({ requestId });
     });
 
-    const response = await request(app)
-      .get('/test')
-      .set('x-request-id', customRequestId)
-      .expect(200);
+    const response = await request(app).get('/test').set('x-request-id', customRequestId).expect(200);
 
     expect(response.body.requestId).toBe(customRequestId);
   });
 
   it('should add requestId to response header', async () => {
-    app.get('/test', (req, res) => {
-      res.json({ success: true });
+    app.get('/test', (_req, _res) => {
+      _res.json({ success: true });
     });
 
     const response = await request(app).get('/test').expect(200);

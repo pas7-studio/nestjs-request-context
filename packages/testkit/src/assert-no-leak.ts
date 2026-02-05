@@ -38,25 +38,21 @@ export function assertNoLeak(actual: Record<string, unknown>[]): void {
     const requestId = item.requestId as string | undefined | null;
 
     if (requestId === undefined || requestId === null) {
-      throw new ContextLeakError(
-        `Result at index ${index} is missing requestId property`,
-      );
+      throw new ContextLeakError(`Result at index ${index} is missing requestId property`);
     }
 
     return requestId;
   });
 
   const uniqueIds = new Set(requestIds);
-  
+
   if (uniqueIds.size !== requestIds.length) {
     // Find duplicates
-    const duplicates = requestIds.filter(
-      (id, index) => requestIds.indexOf(id) !== index,
-    );
+    const duplicates = requestIds.filter((id, index) => requestIds.indexOf(id) !== index);
     const uniqueDuplicates = [...new Set(duplicates)];
-    
+
     throw new ContextLeakError(
-      `Context leak detected: duplicate request IDs found: ${uniqueDuplicates.join(', ')}`,
+      `Context leak detected: duplicate request IDs found: ${uniqueDuplicates.join(', ')}`
     );
   }
 }

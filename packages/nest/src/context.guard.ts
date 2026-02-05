@@ -11,7 +11,7 @@ import { Context } from '@pas7/request-context-core';
  */
 @Injectable()
 export class ContextGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
+  canActivate(_context: ExecutionContext): boolean {
     const currentContext = Context.current();
 
     if (!currentContext) {

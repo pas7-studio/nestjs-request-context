@@ -3,17 +3,12 @@
  */
 
 import { ContextKey, run } from '@pas7/request-context-core';
-import { RequestContextService, MODULE_OPTIONS } from './request-context.service.js';
+import { RequestContextService } from './request-context.service.js';
 
 describe('RequestContextService', () => {
   const mockOptions = {
     mode: 'minimal' as const,
     header: 'x-request-id',
-  };
-
-  const mockModuleOptionsProvider = {
-    provide: MODULE_OPTIONS,
-    useValue: mockOptions,
   };
 
   it('should create service with injected options', () => {

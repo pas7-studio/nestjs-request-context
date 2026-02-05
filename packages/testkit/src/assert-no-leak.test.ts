@@ -8,11 +8,7 @@ import { assertNoLeak, ContextLeakError } from './assert-no-leak.js';
 describe('assertNoLeak', () => {
   describe('Basic functionality', () => {
     it('should pass when contexts are isolated', () => {
-      const contexts = [
-        { requestId: '1' },
-        { requestId: '2' },
-        { requestId: '3' },
-      ];
+      const contexts = [{ requestId: '1' }, { requestId: '2' }, { requestId: '3' }];
 
       expect(() => assertNoLeak(contexts)).not.toThrow();
     });
@@ -109,42 +105,30 @@ describe('assertNoLeak', () => {
 
       expect(() => assertNoLeak(contexts)).toThrow(ContextLeakError);
       expect(() => assertNoLeak(contexts)).toThrow(
-        'Result at index 1 is missing requestId property',
+        'Result at index 1 is missing requestId property'
       );
     });
 
     it('should throw when requestId is undefined', () => {
-      const contexts = [
-        { requestId: '1' },
-        { requestId: undefined },
-        { requestId: '3' },
-      ];
+      const contexts = [{ requestId: '1' }, { requestId: undefined }, { requestId: '3' }];
 
       expect(() => assertNoLeak(contexts)).toThrow(ContextLeakError);
       expect(() => assertNoLeak(contexts)).toThrow(
-        'Result at index 1 is missing requestId property',
+        'Result at index 1 is missing requestId property'
       );
     });
 
     it('should throw when requestId is null', () => {
-      const contexts = [
-        { requestId: '1' },
-        { requestId: null },
-        { requestId: '3' },
-      ];
+      const contexts = [{ requestId: '1' }, { requestId: null }, { requestId: '3' }];
 
       expect(() => assertNoLeak(contexts)).toThrow(ContextLeakError);
       expect(() => assertNoLeak(contexts)).toThrow(
-        'Result at index 1 is missing requestId property',
+        'Result at index 1 is missing requestId property'
       );
     });
 
     it('should throw when requestId is empty string', () => {
-      const contexts = [
-        { requestId: '1' },
-        { requestId: '' },
-        { requestId: '3' },
-      ];
+      const contexts = [{ requestId: '1' }, { requestId: '' }, { requestId: '3' }];
 
       // Empty string is still a string, so it should be valid (though unusual)
       expect(() => assertNoLeak(contexts)).not.toThrow();

@@ -2,7 +2,8 @@
  * Decorator for injecting context values into controller methods
  */
 
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { createParamDecorator } from '@nestjs/common';
+import type { ExecutionContext } from '@nestjs/common';
 import { Context } from '@pas7/request-context-core';
 import type { ContextKey } from '@pas7/request-context-core';
 import { get } from '@pas7/request-context-core';
@@ -52,5 +53,5 @@ export function getContextValue<T>(key: ContextKey<T> | undefined): T | Record<s
 export const Ctx = createParamDecorator(
   <T>(key: ContextKey<T> | undefined, _ctx: ExecutionContext): T | Record<string, unknown> => {
     return getContextValue(key);
-  },
+  }
 );

@@ -62,9 +62,7 @@ describe.skip('createTestAppExpress', () => {
         },
       });
 
-      const response = await request(result.app.getHttpServer())
-        .get('/test')
-        .expect(200);
+      const response = await request(result.app.getHttpServer()).get('/test').expect(200);
 
       expect(response.body.requestId).toBeDefined();
       expect(typeof response.body.requestId).toBe('string');
@@ -93,9 +91,7 @@ describe.skip('createTestAppExpress', () => {
         },
       });
 
-      const response = await request(result.app.getHttpServer())
-        .get('/test/async')
-        .expect(200);
+      const response = await request(result.app.getHttpServer()).get('/test/async').expect(200);
 
       expect(response.body.requestId).toBeDefined();
       expect(typeof response.body.requestId).toBe('string');
@@ -108,9 +104,7 @@ describe.skip('createTestAppExpress', () => {
         },
       });
 
-      const response = await request(result.app.getHttpServer())
-        .get('/test')
-        .expect(200);
+      const response = await request(result.app.getHttpServer()).get('/test').expect(200);
 
       expect(response.headers['x-request-id']).toBeDefined();
       expect(typeof response.headers['x-request-id']).toBe('string');
@@ -123,9 +117,7 @@ describe.skip('createTestAppExpress', () => {
         },
       });
 
-      const response = await request(result.app.getHttpServer())
-        .get('/test')
-        .expect(200);
+      const response = await request(result.app.getHttpServer()).get('/test').expect(200);
 
       expect(response.headers['x-request-id']).toBe(response.body.requestId);
     });

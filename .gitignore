@@ -14,6 +14,14 @@ build/
 *.d.ts.map
 *.js.map
 
+# Generated files (tsup outputs)
+*.js
+*.d.ts
+!**/*.ts
+!**/*.tsx
+!**/*.test.ts
+!**/*.spec.ts
+
 # Test coverage
 coverage/
 .nyc_output/

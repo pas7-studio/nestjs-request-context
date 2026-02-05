@@ -39,9 +39,7 @@ describe('runParallelRequests', () => {
     it('should preserve order when requests complete at different times', async () => {
       const results = await runParallelRequests(5, async (i) => {
         // Random delay to simulate different completion times
-        await new Promise((resolve) =>
-          setTimeout(resolve, Math.random() * 10),
-        );
+        await new Promise((resolve) => setTimeout(resolve, Math.random() * 10));
         return i;
       });
 
@@ -115,7 +113,7 @@ describe('runParallelRequests', () => {
             throw new Error('Test error');
           }
           return i;
-        }),
+        })
       ).rejects.toThrow('Test error');
     });
 
@@ -126,7 +124,7 @@ describe('runParallelRequests', () => {
             throw new Error(`Error at ${i}`);
           }
           return i;
-        }),
+        })
       ).rejects.toThrow();
     });
   });

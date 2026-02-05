@@ -2,8 +2,10 @@
  * Create a test NestJS application with Fastify adapter and request context
  */
 
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, NestFactory } from '@nestjs/core';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import type { INestApplication } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import type { ModuleMetadata } from '@nestjs/common';
 import { RequestContextModule } from '@pas7/nestjs-request-context';
@@ -59,13 +61,9 @@ export interface CreateTestAppFastifyResult {
  * @returns Promise with app, module and close function
  */
 export async function createTestAppFastify(
-  options: CreateTestAppFastifyOptions = {},
+  options: CreateTestAppFastifyOptions = {}
 ): Promise<CreateTestAppFastifyResult> {
-  const {
-    module: moduleMetadata,
-    adapterOptions,
-    contextModuleOptions,
-  } = options;
+  const { module: moduleMetadata, adapterOptions, contextModuleOptions } = options;
 
   // Create testing module with RequestContextModule
   const moduleRef: TestingModule = await Test.createTestingModule({

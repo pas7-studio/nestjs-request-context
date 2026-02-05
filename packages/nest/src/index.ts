@@ -18,7 +18,11 @@ export { ContextInterceptor } from './context.interceptor.js';
 export { ContextGuard } from './context.guard.js';
 
 // Config types
-export type { RequestContextModuleOptions, RequestContextModuleAsyncOptions, RequestContextKeysConfig } from './config.js';
+export type {
+  RequestContextModuleOptions,
+  RequestContextModuleAsyncOptions,
+  RequestContextKeysConfig,
+} from './config.js';
 export { DEFAULT_HEADER, DEFAULT_KEYS, DEFAULT_MODE } from './config.js';
 
 // Keys

@@ -25,7 +25,7 @@
  */
 export async function runParallelRequests<T>(
   n: number,
-  handler: (index: number) => Promise<T>,
+  handler: (index: number) => Promise<T>
 ): Promise<T[]> {
   // Create an array of promises, one for each request
   const promises = Array.from({ length: n }, (_, i) => handler(i));

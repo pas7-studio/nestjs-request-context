@@ -14,6 +14,11 @@ module.exports = [
       'pnpm-lock.yaml',
       'package-lock.json',
       'yarn.lock',
+      '**/*.d.ts',
+      '**/*.d.ts.map',
+      '**/*.js.map',
+      '**/*.config.ts',
+      '**/e2e/**',
     ],
   },
   {
@@ -61,23 +66,6 @@ module.exports = [
       // General rules
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-debugger': 'error',
-      'prefer-const': 'error',
-      'no-var': 'error',
-    },
-  },
-  {
-    files: ['**/*.js', '**/*.jsx'],
-    languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
-    },
-    plugins: {
-      prettier: prettierPlugin,
-    },
-    rules: {
-      ...prettierConfig.rules,
-      'prettier/prettier': 'error',
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-const': 'error',
       'no-var': 'error',
     },

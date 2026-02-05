@@ -22,17 +22,21 @@ class TestController {
   }
 
   @Get('/standard')
-  testStandard(@Ctx(REQUEST_ID_KEY) requestId: string, @Ctx(ROUTE_KEY) route: string, @Ctx(METHOD_KEY) method: string) {
+  testStandard(
+    @Ctx(REQUEST_ID_KEY) requestId: string,
+    @Ctx(ROUTE_KEY) route: string,
+    @Ctx(METHOD_KEY) method: string
+  ) {
     return { requestId, route, method };
   }
 
   @Get('/error')
-  error(@Ctx(REQUEST_ID_KEY) requestId: string) {
+  error(@Ctx(REQUEST_ID_KEY) _requestId: string) {
     throw new Error('Test error');
   }
 
   @Get('/http-error')
-  httpError(@Ctx(REQUEST_ID_KEY) requestId: string) {
+  httpError(@Ctx(REQUEST_ID_KEY) _requestId: string) {
     throw new HttpException('HTTP error', HttpStatus.BAD_REQUEST);
   }
 
@@ -65,9 +69,7 @@ describe('RequestContext E2E', () => {
 
   describe('Basic functionality', () => {
     it('should enrich context with requestId', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/test')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/test').expect(200);
 
       expect(response.body.requestId).toBeDefined();
       expect(response.body.requestId).toMatch(/^[0-9a-f-]{36}$/); // UUID format
@@ -84,9 +86,7 @@ describe('RequestContext E2E', () => {
     });
 
     it('should return entire store when using Ctx() without key', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/test-all')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/test-all').expect(200);
 
       expect(response.body).toBeDefined();
       expect(response.body.requestId).toBeDefined();
@@ -94,9 +94,7 @@ describe('RequestContext E2E', () => {
     });
 
     it('should allow static access through RequestContextService', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/static-access')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/static-access').expect(200);
 
       expect(response.body.requestId).toBeDefined();
       expect(response.body.requestId).toMatch(/^[0-9a-f-]{36}$/);
@@ -129,7 +127,7 @@ describe('RequestContext E2E', () => {
 
     it('should maintain context through error flow', async () => {
       const customRequestId = 'error-flow-request-id';
-      
+
       // First request to get requestId
       const response1 = await request(app.getHttpServer())
         .get('/test')
@@ -171,9 +169,7 @@ describe('RequestContext E2E', () => {
     });
 
     it('should enrich context with requestId, route, and method in standard mode', async () => {
-      const response = await request(appStandard.getHttpServer())
-        .get('/standard')
-        .expect(200);
+      const response = await request(appStandard.getHttpServer()).get('/standard').expect(200);
 
       expect(response.body.requestId).toBeDefined();
       expect(response.body.route).toBeDefined();
@@ -183,9 +179,7 @@ describe('RequestContext E2E', () => {
     });
 
     it('should include route and method in entire store', async () => {
-      const response = await request(appStandard.getHttpServer())
-        .get('/test-all')
-        .expect(200);
+      const response = await request(appStandard.getHttpServer()).get('/test-all').expect(200);
 
       expect(response.body.requestId).toBeDefined();
       expect(response.body.route).toBeDefined();
@@ -231,9 +225,7 @@ describe('RequestContext E2E', () => {
     });
 
     it('should use custom key names', async () => {
-      const response = await request(appCustom.getHttpServer())
-        .get('/test-all')
-        .expect(200);
+      const response = await request(appCustom.getHttpServer()).get('/test-all').expect(200);
 
       expect(response.body.customRequestId).toBeDefined();
       expect(response.body.customRoute).toBeDefined();

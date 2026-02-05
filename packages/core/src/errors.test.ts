@@ -3,11 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import {
-  ContextNotActiveError,
-  ContextKeyCollisionError,
-  ContextMissingError,
-} from './errors.js';
+import { ContextNotActiveError, ContextKeyCollisionError, ContextMissingError } from './errors.js';
 import { run, get, set, require } from './api.js';
 import { ContextKey } from './contracts.js';
 
@@ -15,7 +11,7 @@ describe('ContextNotActiveError', () => {
   it('should create error with correct message', () => {
     const error = new ContextNotActiveError();
     expect(error.message).toBe(
-      'No active context. Use run() to create a context before accessing it.',
+      'No active context. Use run() to create a context before accessing it.'
     );
     expect(error.name).toBe('ContextNotActiveError');
   });
@@ -36,7 +32,7 @@ describe('ContextKeyCollisionError', () => {
   it('should create error with key in message', () => {
     const error = new ContextKeyCollisionError('test-key');
     expect(error.message).toBe(
-      'Key "test-key" already exists in store and policy is set to \'deny\'.',
+      'Key "test-key" already exists in store and policy is set to \'deny\'.'
     );
     expect(error.name).toBe('ContextKeyCollisionError');
   });

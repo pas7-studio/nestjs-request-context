@@ -4,7 +4,7 @@
 
 import { Inject, Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { ContextKey, run, merge } from '@pas7/request-context-core';
+import { run } from '@pas7/request-context-core';
 import { MODULE_OPTIONS } from './request-context.service.js';
 import type { RequestContextModuleOptions } from './config.js';
 
@@ -16,9 +16,7 @@ import type { RequestContextModuleOptions } from './config.js';
  */
 @Injectable()
 export class ContextInterceptor implements NestInterceptor {
-  constructor(
-    @Inject(MODULE_OPTIONS) private readonly options: RequestContextModuleOptions,
-  ) {}
+  constructor(@Inject(MODULE_OPTIONS) private readonly options: RequestContextModuleOptions) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const httpContext = context.switchToHttp();
@@ -55,7 +53,8 @@ export class ContextInterceptor implements NestInterceptor {
     // Add IP if configured
     if (this.options.keys?.ip) {
       const ipKey = this.options.keys.ip;
-      contextData[ipKey] = request.ip ?? (request.socket as { remoteAddress?: string })?.remoteAddress;
+      contextData[ipKey] =
+        request.ip ?? (request.socket as { remoteAddress?: string })?.remoteAddress;
     }
 
     // Run the handler within the enriched context

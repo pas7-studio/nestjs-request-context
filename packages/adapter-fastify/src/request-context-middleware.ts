@@ -7,6 +7,8 @@ import { Injectable } from '@nestjs/common';
 import { run } from '@pas7/request-context-core';
 import type { RequestContextFastifyOptions } from './config.js';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 /**
  * NestJS middleware class for request context with FastifyAdapter
  *
@@ -35,7 +37,7 @@ import type { RequestContextFastifyOptions } from './config.js';
  * ```
  */
 export function requestContextMiddleware(
-  options?: RequestContextFastifyOptions,
+  options?: RequestContextFastifyOptions
 ): new () => NestMiddleware {
   // Merge options with defaults (avoid allocations in hot path)
   const headerName = options?.header ?? 'x-request-id';
@@ -44,12 +46,13 @@ export function requestContextMiddleware(
 
   @Injectable()
   class RequestContextMiddleware implements NestMiddleware {
-    use(req: any, res: any, next: () => void) {
+    use(req: unknown, res: unknown, next: () => void) {
       // Get request ID from header or generate new one
       const headers = req.headers as Record<string, string | string[] | undefined>;
-      const requestId = typeof headers[headerName] === 'string'
-        ? headers[headerName]
-        : idGenerator();
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const requestId =
+        typeof headers[headerName] === 'string' ? headers[headerName] : idGenerator();
 
       // Optionally add request ID to response headers
       if (addResponseHeader) {
@@ -59,14 +62,11 @@ export function requestContextMiddleware(
       // Start request context by wrapping request handling
       // Using callback pattern to preserve AsyncLocalStorage throughout request lifecycle
       // The next() callback maintains context until request handling completes
-      run(
-        { requestId },
-        () => {
-          // The route handler will be executed within this context
-          // NestJS middleware chain maintains AsyncLocalStorage properly through the callback
-          next();
-        },
-      );
+      run({ requestId }, () => {
+        // The route handler will be executed within this context
+        // NestJS middleware chain maintains AsyncLocalStorage properly through the callback
+        next();
+      });
     }
   }
 

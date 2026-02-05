@@ -3,7 +3,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { ContextKey, SetPolicy } from './contracts.js';
+import { ContextKey } from './contracts.js';
+import type { SetPolicy } from './contracts.js';
 
 describe('ContextKey', () => {
   it('should create a ContextKey with a name', () => {

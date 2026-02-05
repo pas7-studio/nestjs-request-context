@@ -2,7 +2,6 @@
  * Tests for Ctx decorator
  */
 
-import { Controller, Get } from '@nestjs/common';
 import { run, Context, get } from '@pas7/request-context-core';
 import { Ctx } from './ctx.decorator.js';
 import { REQUEST_ID_KEY } from './keys.js';
