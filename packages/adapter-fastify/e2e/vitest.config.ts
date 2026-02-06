@@ -6,21 +6,12 @@ export default defineConfig({
     alias: {
       '@pas7/request-context-core': path.resolve(__dirname, '../../core/src'),
       '@pas7/nestjs-request-context': path.resolve(__dirname, '../../nest/src'),
-      '@pas7/nestjs-request-context-adapter-express': path.resolve(__dirname, '../../adapter-express/src'),
-      '@pas7/nestjs-request-context-adapter-fastify': path.resolve(__dirname, '../../adapter-fastify/src'),
+      '@pas7/nestjs-request-context-adapter-fastify': path.resolve(__dirname, '../src'),
     },
   },
   test: {
-    environment: 'node',
-    include: ['e2e/testkit.e2e-spec.ts'],
-    testTimeout: 30000,
-    hookTimeout: 60000,
-    pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
-    },
+    include: ['**/*.e2e-spec.ts'],
+    exclude: ['**/node_modules/**', '**/dist/**'],
   },
   esbuild: {
     tsconfigRaw: {

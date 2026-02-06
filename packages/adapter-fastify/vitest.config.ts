@@ -11,6 +11,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    include: ['**/*.test.ts', '**/*.spec.ts', '**/*.e2e-spec.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
@@ -19,8 +20,17 @@ export default defineConfig({
         'dist/',
         '**/*.test.ts',
         '**/*.spec.ts',
+        '**/*.e2e-spec.ts',
         '**/*.d.ts',
       ],
+    },
+  },
+  esbuild: {
+    tsconfigRaw: {
+      compilerOptions: {
+        experimentalDecorators: true,
+        emitDecoratorMetadata: true,
+      },
     },
   },
 });
