@@ -1,6 +1,6 @@
 {
   "name": "@pas7/nestjs-request-context-monorepo",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "private": true,
   "description": "Zero-overhead request context management for NestJS without request-scoped providers using AsyncLocalStorage",
   "keywords": [
