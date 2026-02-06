@@ -2,6 +2,15 @@
   "name": "@pas7/nestjs-request-context",
   "version": "0.0.0",
   "description": "NestJS integration for request context management",
+  "homepage": "https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/nest",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pas7-studio/nestjs-request-context.git",
+    "directory": "packages/nest"
+  },
+  "bugs": {
+    "url": "https://github.com/pas7-studio/nestjs-request-context/issues"
+  },
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",

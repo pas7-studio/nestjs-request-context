@@ -2,6 +2,15 @@
   "name": "@pas7/nestjs-request-context-adapter-express",
   "version": "0.0.0",
   "description": "Express adapter for NestJS request context",
+  "homepage": "https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/adapter-express",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pas7-studio/nestjs-request-context.git",
+    "directory": "packages/adapter-express"
+  },
+  "bugs": {
+    "url": "https://github.com/pas7-studio/nestjs-request-context/issues"
+  },
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",

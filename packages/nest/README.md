@@ -1,14 +1,9 @@
 # @pas7/nestjs-request-context
 
-NestJS integration for @pas7/request-context-core with decorators & interceptors.
+[![npm version](https://img.shields.io/npm/v/@pas7/nestjs-request-context?style=flat-square)](https://www.npmjs.com/package/@pas7/nestjs-request-context)
+[![License](https://img.shields.io/github/license/pas7-studio/nestjs-request-context?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/blob/main/LICENSE)
 
-## Features
-
-- RequestContextModule for easy configuration
-- @Ctx() decorator for controller parameters
-- ContextInterceptor for context enrichment
-- ContextGuard for context validation
-- Static service for context access
+NestJS integration for request context based on AsyncLocalStorage.
 
 ## Installation
 
@@ -16,17 +11,14 @@ NestJS integration for @pas7/request-context-core with decorators & interceptors
 pnpm add @pas7/nestjs-request-context
 ```
 
-## Quickstart
+## Quick Start
 
 ```typescript
 import { Module } from '@nestjs/common';
 import { RequestContextModule } from '@pas7/nestjs-request-context';
 
 @Module({
-  imports: [
-    RequestContextModule.forRoot(),
-  ],
-  controllers: [YourController],
+  imports: [RequestContextModule.forRoot()],
 })
 export class AppModule {}
 ```
@@ -35,11 +27,10 @@ export class AppModule {}
 
 ```typescript
 import { Controller, Get } from '@nestjs/common';
-import { Ctx } from '@pas7/nestjs-request-context';
-import { REQUEST_ID_KEY } from '@pas7/nestjs-request-context';
+import { Ctx, REQUEST_ID_KEY } from '@pas7/nestjs-request-context';
 
 @Controller()
-export class YourController {
+export class AppController {
   @Get()
   hello(@Ctx(REQUEST_ID_KEY) requestId: string) {
     return { requestId };
@@ -47,38 +38,22 @@ export class YourController {
 }
 ```
 
-## API
+## Related Packages
 
-### RequestContextModule.forRoot(options?)
+- Core primitives: [`@pas7/request-context-core`](https://www.npmjs.com/package/@pas7/request-context-core)
+- Express adapter: [`@pas7/nestjs-request-context-adapter-express`](https://www.npmjs.com/package/@pas7/nestjs-request-context-adapter-express)
+- Fastify adapter: [`@pas7/nestjs-request-context-adapter-fastify`](https://www.npmjs.com/package/@pas7/nestjs-request-context-adapter-fastify)
+- Testkit: [`@pas7/nestjs-request-context-testkit`](https://www.npmjs.com/package/@pas7/nestjs-request-context-testkit)
 
-```typescript
-interface RequestContextModuleOptions {
-  header?: string;
-  idGenerator?: () => string;
-  mode?: 'minimal' | 'standard';
-  keys?: {
-    requestId?: string;
-    route?: string;
-    method?: string;
-    ip?: string;
-  };
-}
-```
+## Links
 
-### @Ctx(key?)
+- Repository: https://github.com/pas7-studio/nestjs-request-context
+- Package source: https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/nest
+- Full docs: https://github.com/pas7-studio/nestjs-request-context#readme
 
-Decorator to inject context:
-- `@Ctx()` - Returns full store
-- `@Ctx(REQUEST_ID_KEY)` - Returns typed value
+## Versioning
 
-### RequestContextService
-
-Static service:
-```typescript
-RequestContextService.get<T>(key: ContextKey<T>): T | undefined;
-RequestContextService.set<T>(key: ContextKey<T>, value: T): void;
-RequestContextService.getRequestId(): string | undefined;
-```
+Versions are managed in the monorepo via Changesets (SemVer).
 
 ## License
 

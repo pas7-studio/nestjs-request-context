@@ -1,91 +1,58 @@
 # @pas7/nestjs-request-context-adapter-fastify
 
-Fastify adapter for @pas7/nestjs-request-context.
+[![npm version](https://img.shields.io/npm/v/@pas7/nestjs-request-context-adapter-fastify?style=flat-square)](https://www.npmjs.com/package/@pas7/nestjs-request-context-adapter-fastify)
+[![License](https://img.shields.io/github/license/pas7-studio/nestjs-request-context?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/blob/main/LICENSE)
+
+Fastify adapter for `@pas7/nestjs-request-context`.
 
 ## Installation
 
 ```bash
-pnpm add @pas7/nestjs-request-context-adapter-fastify
+pnpm add @pas7/nestjs-request-context @pas7/nestjs-request-context-adapter-fastify
 ```
 
-## Quickstart
+## Quick Start
 
 ```typescript
-import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { requestContextMiddleware } from '@pas7/nestjs-request-context-adapter-fastify';
 
-@Module({
-  // ...
-})
+@Module({})
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(requestContextMiddleware()).forRoutes('*');
   }
 }
-```
-
-## Known Limitations
-
-### AsyncLocalStorage and Fastify Hooks
-
-This adapter has known limitations with Fastify hooks due to AsyncLocalStorage incompatibility. See [KNOWN_LIMITATIONS.md](../../KNOWN_LIMITATIONS.md) for full details.
-
-### Recommended Usage
-
-For NestJS applications with FastifyAdapter, use the middleware pattern:
-
-```typescript
-import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { requestContextMiddleware } from '@pas7/nestjs-request-context-adapter-fastify';
-
-@Module({
-  // ...
-})
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(requestContextMiddleware()).forRoutes('*');
-  }
-}
-```
-
-**Do not use the plugin for NestJS applications** - it won't work correctly with Fastify hooks.
-
-### API Reference
-
-#### requestContextMiddleware(options?)
-
-NestJS middleware for context initialization (Recommended for NestJS + FastifyAdapter).
-
-```typescript
-function requestContextMiddleware(
-  options?: RequestContextFastifyOptions,
-): NestMiddleware
-```
-
-**Note:** This is the recommended approach for NestJS applications.
-
-#### requestContextPlugin(options?)
-
-Fastify plugin for context initialization (Limited functionality).
-
-⚠️ **Note:** This has limited functionality due to AsyncLocalStorage incompatibility with Fastify hooks. Use the middleware pattern instead.
-
-```typescript
-async function requestContextPlugin(
-  fastify: FastifyInstance,
-  options: RequestContextFastifyOptions,
-): Promise<void>
 ```
 
 ## Options
 
 ```typescript
 interface RequestContextFastifyOptions {
-  header?: string; // default: 'x-request-id'
-  idGenerator?: () => string; // default: crypto.randomUUID
-  addResponseHeader?: boolean; // default: true
+  header?: string;
+  idGenerator?: () => string;
+  addResponseHeader?: boolean;
 }
 ```
+
+## Note
+
+For NestJS + FastifyAdapter, use the middleware approach above.
+
+## Related Packages
+
+- Main module: [`@pas7/nestjs-request-context`](https://www.npmjs.com/package/@pas7/nestjs-request-context)
+- Core primitives: [`@pas7/request-context-core`](https://www.npmjs.com/package/@pas7/request-context-core)
+
+## Links
+
+- Repository: https://github.com/pas7-studio/nestjs-request-context
+- Package source: https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/adapter-fastify
+- Full docs: https://github.com/pas7-studio/nestjs-request-context#readme
+
+## Versioning
+
+Versions are managed in the monorepo via Changesets (SemVer).
 
 ## License
 

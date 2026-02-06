@@ -1,13 +1,9 @@
 # @pas7/nestjs-request-context-testkit
 
-Testing utilities for @pas7/nestjs-request-context.
+[![npm version](https://img.shields.io/npm/v/@pas7/nestjs-request-context-testkit?style=flat-square)](https://www.npmjs.com/package/@pas7/nestjs-request-context-testkit)
+[![License](https://img.shields.io/github/license/pas7-studio/nestjs-request-context?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/blob/main/LICENSE)
 
-## Features
-
-- createTestAppFastify() - Create Fastify test app
-- createTestAppExpress() - Create Express test app
-- runParallelRequests() - Run parallel requests
-- assertNoLeak() - Validate context isolation
+Testing utilities for `@pas7/nestjs-request-context`.
 
 ## Installation
 
@@ -18,45 +14,41 @@ pnpm add -D @pas7/nestjs-request-context-testkit
 ## Usage
 
 ```typescript
-import { createTestAppFastify, runParallelRequests, assertNoLeak } from '@pas7/nestjs-request-context-testkit';
+import { assertNoLeak, createTestAppFastify, runParallelRequests } from '@pas7/nestjs-request-context-testkit';
 
-describe('Context isolation', () => {
-  let app: NestApplication;
-
-  beforeAll(async () => {
-    const testApp = await createTestAppFastify({
-      module: {
-        controllers: [TestController],
-      },
-    });
-    app = testApp.app;
-  });
-
-  it('should not leak context between 100 parallel requests', async () => {
-    const results = await runParallelRequests(100, async (i) => {
-      return await request(app.getHttpServer())
-        .get(`/test/${i}`)
-        .expect(200);
-    });
-
-    assertNoLeak(results.map((r) => r.body));
-  });
+const testApp = await createTestAppFastify({
+  module: { controllers: [TestController] },
 });
+
+const responses = await runParallelRequests(50, (i) =>
+  request(testApp.app.getHttpServer()).get(`/test/${i}`).expect(200)
+);
+
+assertNoLeak(responses.map((r) => r.body));
 ```
 
 ## API
 
-### createTestAppFastify(options?)
-Creates NestApplication with FastifyAdapter and context.
+- `createTestAppFastify(options?)`
+- `createTestAppExpress(options?)`
+- `runParallelRequests(count, handler)`
+- `assertNoLeak(results)`
 
-### createTestAppExpress(options?)
-Creates NestApplication with ExpressAdapter and context.
+## Related Packages
 
-### runParallelRequests(n, handler)
-Runs n parallel requests and returns results in order.
+- Main module: [`@pas7/nestjs-request-context`](https://www.npmjs.com/package/@pas7/nestjs-request-context)
+- Express adapter: [`@pas7/nestjs-request-context-adapter-express`](https://www.npmjs.com/package/@pas7/nestjs-request-context-adapter-express)
+- Fastify adapter: [`@pas7/nestjs-request-context-adapter-fastify`](https://www.npmjs.com/package/@pas7/nestjs-request-context-adapter-fastify)
 
-### assertNoLeak(results)
-Validates that contexts don't leak between requests.
+## Links
+
+- Repository: https://github.com/pas7-studio/nestjs-request-context
+- Package source: https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/testkit
+- Full docs: https://github.com/pas7-studio/nestjs-request-context#readme
+
+## Versioning
+
+Versions are managed in the monorepo via Changesets (SemVer).
 
 ## License
 

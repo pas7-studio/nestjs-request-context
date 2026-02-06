@@ -2,10 +2,10 @@
 
 **Zero-overhead request context management for NestJS without request-scoped providers** | TypeScript | NestJS
 
-[![npm version](https://img.shields.io/npm/v/@pas7/nestjs-request-context?style=flat-square)](https://www.npmjs.com/package/@pas7/nestjs-request-context)
-[![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://)
-[![Build Status](https://img.shields.io/github/actions/pas7-studio/nestjs-request-context/workflows/CI/badge.svg)](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/CI.yml)
-[![License](https://img.shields.io/npm/l/@pas7/nestjs-request-context?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/blob/main/LICENSE)
+[![Release](https://img.shields.io/github/v/release/pas7-studio/nestjs-request-context?sort=semver&style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/releases)
+[![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml)
+[![Build Status](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml/badge.svg)](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/pas7-studio/nestjs-request-context?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/blob/main/LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-brightgreen)](https://www.typescriptlang.org/)
 
 ## 🎯 Problem Solved
