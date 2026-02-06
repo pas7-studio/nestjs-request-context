@@ -30,6 +30,8 @@ export interface RequestContextModuleOptions {
   mode?: 'minimal' | 'standard';
   /** Custom key names for context storage */
   keys?: RequestContextKeysConfig;
+  /** Whether to register the global APP_INTERCEPTOR (default: true) */
+  useGlobalInterceptor?: boolean;
 }
 
 /**

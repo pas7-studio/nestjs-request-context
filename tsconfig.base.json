@@ -1,12 +1,5 @@
 {
   "files": [],
-  "references": [
-    { "path": "./packages/core" },
-    { "path": "./packages/nest" },
-    { "path": "./packages/adapter-express" },
-    { "path": "./packages/adapter-fastify" },
-    { "path": "./packages/testkit" }
-  ],
   "compilerOptions": {
     /* Basic Options */
     "target": "ES2022",

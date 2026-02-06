@@ -54,17 +54,22 @@ export class RequestContextModule {
         useValue: options,
       },
       RequestContextService,
-      ContextInterceptor,
-      ContextGuard,
-      {
+    ];
+
+    const extraProviders: Provider[] = [];
+
+    // Only register ContextInterceptor, ContextGuard, and APP_INTERCEPTOR if useGlobalInterceptor is true (default)
+    if (options.useGlobalInterceptor !== false) {
+      providers.push(ContextInterceptor, ContextGuard);
+      extraProviders.push({
         provide: 'APP_INTERCEPTOR',
         useClass: ContextInterceptor,
-      },
-    ];
+      });
+    }
 
     return {
       module: RequestContextModule,
-      providers,
+      providers: [...providers, ...extraProviders],
       exports: [RequestContextService],
       global: true,
     };
@@ -101,18 +106,23 @@ export class RequestContextModule {
         inject: options.inject as (InjectionToken | OptionalFactoryDependency)[] | undefined,
       },
       RequestContextService,
-      ContextInterceptor,
-      ContextGuard,
-      {
-        provide: 'APP_INTERCEPTOR',
-        useClass: ContextInterceptor,
-      },
     ];
+
+    const extraProviders: Provider[] = [];
+
+    // Note: For async configuration, we always register ContextInterceptor and ContextGuard
+    // because we can't determine useGlobalInterceptor value at registration time
+    // Users who need to disable it can use forRoot with useGlobalInterceptor: false
+    providers.push(ContextInterceptor, ContextGuard);
+    extraProviders.push({
+      provide: 'APP_INTERCEPTOR',
+      useClass: ContextInterceptor,
+    });
 
     return {
       module: RequestContextModule,
       imports: options.imports,
-      providers,
+      providers: [...providers, ...extraProviders],
       exports: [RequestContextService],
       global: true,
     };

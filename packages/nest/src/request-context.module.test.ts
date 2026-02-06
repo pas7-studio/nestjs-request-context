@@ -2,8 +2,8 @@
  * Tests for RequestContextModule
  */
 
-import { RequestContextModule } from './request-context.module.js';
-import { RequestContextService, MODULE_OPTIONS } from './request-context.service.js';
+import { RequestContextModule, MODULE_OPTIONS } from './request-context.module.js';
+import { RequestContextService } from './request-context.service.js';
 import { ContextInterceptor } from './context.interceptor.js';
 import { ContextGuard } from './context.guard.js';
 

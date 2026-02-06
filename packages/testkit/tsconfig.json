@@ -1,13 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
-  "references": [
-    { "path": "../core" },
-    { "path": "../nest" },
-    { "path": "../adapter-express" },
-    { "path": "../adapter-fastify" }
-  ],
   "compilerOptions": {
-    "composite": true,
     "rootDir": "./src",
     "outDir": "./dist"
   },

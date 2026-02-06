@@ -1,10 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
-  "references": [
-    { "path": "../core" }
-  ],
   "compilerOptions": {
-    "composite": true,
     "rootDir": "./src",
     "outDir": "./dist",
     "experimentalDecorators": true,

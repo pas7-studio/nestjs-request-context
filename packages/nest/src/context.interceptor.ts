@@ -5,7 +5,7 @@
 import { Inject, Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { run } from '@pas7/request-context-core';
-import { MODULE_OPTIONS } from './request-context.service.js';
+import { MODULE_OPTIONS } from './request-context.module.js';
 import type { RequestContextModuleOptions } from './config.js';
 
 /**

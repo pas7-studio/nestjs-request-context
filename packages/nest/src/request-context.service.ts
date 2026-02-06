@@ -6,9 +6,6 @@ import { Injectable } from '@nestjs/common';
 import type { ContextKey } from '@pas7/request-context-core';
 import { get, set, has, require } from '@pas7/request-context-core';
 
-/** Injection token for module options */
-export const MODULE_OPTIONS = Symbol('MODULE_OPTIONS');
-
 /**
  * Service for accessing request context
  * Provides static methods for convenient access without dependency injection
