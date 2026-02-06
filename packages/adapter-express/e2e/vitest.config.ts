@@ -4,9 +4,9 @@ import path from 'node:path';
 export default defineConfig({
   resolve: {
     alias: {
-      '@pas7/request-context-core': path.resolve(__dirname, '../../core/dist/index.js'),
-      '@pas7/nestjs-request-context': path.resolve(__dirname, '../../nest/dist/index.js'),
-      '@pas7/nestjs-request-context-adapter-express': path.resolve(__dirname, '../dist/index.js'),
+      '@pas7/request-context-core': path.resolve(__dirname, '../../core/src/index.ts'),
+      '@pas7/nestjs-request-context': path.resolve(__dirname, '../../nest/src/index.ts'),
+      '@pas7/nestjs-request-context-adapter-express': path.resolve(__dirname, '../src/index.ts'),
     },
   },
   test: {
