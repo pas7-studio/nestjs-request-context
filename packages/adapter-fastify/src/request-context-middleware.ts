@@ -7,8 +7,6 @@ import { Injectable } from '@nestjs/common';
 import { run } from '@pas7/request-context-core';
 import type { RequestContextFastifyOptions } from './config.js';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-
 /**
  * NestJS middleware class for request context with FastifyAdapter
  *
@@ -46,9 +44,13 @@ export function requestContextMiddleware(
 
   @Injectable()
   class RequestContextMiddleware implements NestMiddleware {
-    use(req: unknown, res: unknown, next: () => void) {
+    use(
+      req: { headers: Record<string, string | string[] | undefined> },
+      res: { header: (name: string, value: string) => void },
+      next: () => void
+    ) {
       // Get request ID from header or generate new one
-      const headers = req.headers as Record<string, string | string[] | undefined>;
+      const headers = req.headers;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const requestId =
