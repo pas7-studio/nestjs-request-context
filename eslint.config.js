@@ -19,6 +19,10 @@ module.exports = [
       '**/*.js.map',
       '**/*.config.ts',
       '**/e2e/**',
+      '**/*.test.ts',
+      '**/*.spec.ts',
+      '**/*.e2e-spec.ts',
+      '**/*.js',
     ],
   },
   {
