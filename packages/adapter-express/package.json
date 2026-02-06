@@ -1,6 +1,6 @@
 {
   "name": "@pas7/nestjs-request-context-adapter-express",
-  "version": "0.0.0",
+  "version": "0.3.0",
   "description": "Express adapter for NestJS request context",
   "homepage": "https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/adapter-express",
   "repository": {
