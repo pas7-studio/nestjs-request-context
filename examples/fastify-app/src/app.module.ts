@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { RequestContextModule } from '@pas7/nestjs-request-context';
 import { AppController } from './app.controller';
 import { requestContextMiddleware } from '@pas7/nestjs-request-context-adapter-fastify';

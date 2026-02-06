@@ -3,7 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: ['src/index.ts'],
   format: ['esm', 'cjs'],
-  dts: false, // Disabled due to @types/express resolution issue in build environment
+  dts: true,
   clean: true,
   splitting: false,
   sourcemap: true,

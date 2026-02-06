@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { Ctx } from '@pas7/nestjs-request-context';
-import { REQUEST_ID_KEY, ROUTE_KEY, METHOD_KEY } from '@pas7/nestjs-request-context';
+import { REQUEST_ID_KEY } from '@pas7/nestjs-request-context';
 
 @Controller()
 export class AppController {
