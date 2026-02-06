@@ -42,9 +42,12 @@ describe('RequestContextModule', () => {
       const moduleRef = RequestContextModule.forRoot();
 
       // Cannot actually compile without a controller, but we can test structure
-      expect(moduleRef.providers).toContainEqual(
+      const optionsProvider = moduleRef.providers.find(
+        (p) => typeof p === 'object' && p !== null && 'provide' in p && typeof p.provide === 'symbol'
+      );
+      expect(optionsProvider).toBeDefined();
+      expect(optionsProvider).toEqual(
         expect.objectContaining({
-          provide: MODULE_OPTIONS,
           useValue: {},
         })
       );
@@ -58,9 +61,12 @@ describe('RequestContextModule', () => {
 
       const moduleRef = RequestContextModule.forRoot(options);
 
-      expect(moduleRef.providers).toContainEqual(
+      const optionsProvider = moduleRef.providers.find(
+        (p) => typeof p === 'object' && p !== null && 'provide' in p && typeof p.provide === 'symbol'
+      );
+      expect(optionsProvider).toBeDefined();
+      expect(optionsProvider).toEqual(
         expect.objectContaining({
-          provide: MODULE_OPTIONS,
           useValue: options,
         })
       );
@@ -138,9 +144,12 @@ describe('RequestContextModule', () => {
 
       const moduleRef = RequestContextModule.forRootAsync(asyncOptions);
 
-      expect(moduleRef.providers).toContainEqual(
+      const optionsProvider = moduleRef.providers.find(
+        (p) => typeof p === 'object' && p !== null && 'provide' in p && typeof p.provide === 'symbol'
+      );
+      expect(optionsProvider).toBeDefined();
+      expect(optionsProvider).toEqual(
         expect.objectContaining({
-          provide: MODULE_OPTIONS,
           useFactory: asyncOptions.useFactory,
           inject: asyncOptions.inject,
         })

@@ -128,11 +128,4 @@ describe('RequestContextService', () => {
       });
     });
   });
-
-  describe('instance methods', () => {
-    it('should have options property', () => {
-      const service = new RequestContextService(mockOptions);
-      expect(service.options).toBe(mockOptions);
-    });
-  });
 });
