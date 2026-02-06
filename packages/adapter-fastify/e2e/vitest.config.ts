@@ -3,10 +3,11 @@ import path from 'node:path';
 
 export default defineConfig({
   resolve: {
-    // Use src for testing adapter-fastify plugin, but dist for nest to avoid Symbol conflicts
-    '@pas7/request-context-core': path.resolve(__dirname, '../../core/src'),
-    '@pas7/nestjs-request-context': path.resolve(__dirname, '../../nest/dist/index.js'),
-    '@pas7/nestjs-request-context-adapter-fastify': path.resolve(__dirname, '../src'),
+    alias: {
+      '@pas7/request-context-core': path.resolve(__dirname, '../../core/dist/index.js'),
+      '@pas7/nestjs-request-context': path.resolve(__dirname, '../../nest/dist/index.js'),
+      '@pas7/nestjs-request-context-adapter-fastify': path.resolve(__dirname, '../dist/index.js'),
+    },
   },
   test: {
     include: ['**/*.e2e-spec.ts'],

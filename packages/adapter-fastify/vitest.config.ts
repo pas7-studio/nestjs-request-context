@@ -6,6 +6,7 @@ export default defineConfig({
     alias: {
       '@pas7/request-context-core': path.resolve(__dirname, '../core/src'),
       '@pas7/nestjs-request-context': path.resolve(__dirname, '../nest/src'),
+      '@pas7/nestjs-request-context-adapter-fastify': path.resolve(__dirname, './src'),
     },
   },
   test: {
