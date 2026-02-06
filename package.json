@@ -1,6 +1,6 @@
 {
   "name": "@pas7/nestjs-request-context-monorepo",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "description": "Zero-overhead request context management for NestJS without request-scoped providers using AsyncLocalStorage",
   "keywords": [
@@ -34,6 +34,7 @@
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
+    "typecheck": "cd packages/core && tsc --noEmit && cd ../nest && tsc --noEmit && cd ../adapter-express && tsc --noEmit && cd ../adapter-fastify && tsc --noEmit && cd ../testkit && tsc --noEmit",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "changeset": "changeset",

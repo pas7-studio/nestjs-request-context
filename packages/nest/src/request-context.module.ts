@@ -2,11 +2,20 @@
  * NestJS module for request context management
  */
 
-import { DynamicModule, Module, Provider } from '@nestjs/common';
+import {
+  DynamicModule,
+  InjectionToken,
+  Module,
+  OptionalFactoryDependency,
+  Provider,
+} from '@nestjs/common';
 import type { RequestContextModuleAsyncOptions, RequestContextModuleOptions } from './config.js';
-import { RequestContextService, MODULE_OPTIONS } from './request-context.service.js';
+import { RequestContextService } from './request-context.service.js';
 import { ContextInterceptor } from './context.interceptor.js';
 import { ContextGuard } from './context.guard.js';
+
+/** Injection token for module options */
+export const MODULE_OPTIONS = Symbol('MODULE_OPTIONS');
 
 /**
  * Module for managing request context in NestJS applications
@@ -89,7 +98,7 @@ export class RequestContextModule {
       {
         provide: MODULE_OPTIONS,
         useFactory: options.useFactory,
-        inject: options.inject,
+        inject: options.inject as (InjectionToken | OptionalFactoryDependency)[] | undefined,
       },
       RequestContextService,
       ContextInterceptor,

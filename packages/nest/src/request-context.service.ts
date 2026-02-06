@@ -2,10 +2,9 @@
  * Injectable service providing static access to request context
  */
 
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import type { ContextKey } from '@pas7/request-context-core';
 import { get, set, has, require } from '@pas7/request-context-core';
-import type { RequestContextModuleOptions } from './config.js';
 
 /** Injection token for module options */
 export const MODULE_OPTIONS = Symbol('MODULE_OPTIONS');
@@ -14,9 +13,10 @@ export const MODULE_OPTIONS = Symbol('MODULE_OPTIONS');
  * Service for accessing request context
  * Provides static methods for convenient access without dependency injection
  */
+/* eslint-disable @typescript-eslint/no-extraneous-class */
 @Injectable()
 export class RequestContextService {
-  constructor(@Inject(MODULE_OPTIONS) private readonly options: RequestContextModuleOptions) {}
+  // Constructor removed - unused dependency injection parameter
 
   /**
    * Get a value from the current context

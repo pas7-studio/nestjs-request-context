@@ -1,7 +1,7 @@
 /**
  * NestJS interceptor for Fastify request context
  */
-import { NestInterceptor } from '@nestjs/common';
+import type { NestInterceptor } from '@nestjs/common';
 import type { RequestContextFastifyOptions } from './config.js';
 /**
  * NestJS interceptor that integrates the Fastify request context plugin with NestJS

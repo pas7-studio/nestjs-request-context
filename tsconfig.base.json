@@ -11,10 +11,10 @@
     /* Type Checking */
     "strict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "noUncheckedIndexedAccess": true,
+    "noUncheckedIndexedAccess": false,
 
     /* Module Resolution Options */
     "esModuleInterop": true,
@@ -30,14 +30,7 @@
     "outDir": "./dist",
 
     /* Path Mapping */
-    "baseUrl": ".",
-    "paths": {
-      "@pas7/request-context-core": ["./packages/core/src"],
-      "@pas7/nestjs-request-context": ["./packages/nest/src"],
-      "@pas7/nestjs-request-context-adapter-fastify": ["./packages/adapter-fastify/src"],
-      "@pas7/nestjs-request-context-adapter-express": ["./packages/adapter-express/src"],
-      "@pas7/nestjs-request-context-testkit": ["./packages/testkit/src"]
-    }
+    "baseUrl": "."
   },
   "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
 }

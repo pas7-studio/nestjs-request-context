@@ -1,7 +1,7 @@
 /**
  * NestJS interceptor for Express request context
  */
-import { NestInterceptor } from '@nestjs/common';
+import type { NestInterceptor } from '@nestjs/common';
 import type { RequestContextExpressOptions } from './config.js';
 /**
  * NestJS interceptor that integrates the Express request context middleware with NestJS

@@ -25,9 +25,7 @@ export async function requestContextPlugin(fastify, options = {}) {
     fastify.addHook('onRequest', async (request, reply) => {
         // Get request ID from header or generate new one
         const headers = request.headers;
-        const requestId = typeof headers[headerName] === 'string'
-            ? headers[headerName]
-            : idGenerator();
+        const requestId = typeof headers[headerName] === 'string' ? headers[headerName] : idGenerator();
         // Optionally add request ID to response headers
         if (addResponseHeader) {
             reply.header(headerName, requestId);

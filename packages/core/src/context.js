@@ -96,7 +96,7 @@ export class Context {
         const currentStore = this._store.getStore();
         // Clear current store
         for (const key of Object.keys(currentStore)) {
-            delete currentStore[key];
+            Reflect.deleteProperty(currentStore, key);
         }
         // Restore from snapshot
         Object.assign(currentStore, snapshot.store);

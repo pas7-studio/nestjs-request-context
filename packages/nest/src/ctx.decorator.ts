@@ -28,7 +28,7 @@ export function getContextValue<T>(key: ContextKey<T> | undefined): T | Record<s
     return currentContext._getStore().getStore() as Record<string, unknown>;
   }
   // Return value for the specific key
-  return get(key);
+  return get(key) as T;
 }
 
 /**
@@ -52,6 +52,6 @@ export function getContextValue<T>(key: ContextKey<T> | undefined): T | Record<s
  */
 export const Ctx = createParamDecorator(
   <T>(key: ContextKey<T> | undefined, _ctx: ExecutionContext): T | Record<string, unknown> => {
-    return getContextValue(key);
+    return key ? (get(key) as T) : (getContextValue(undefined) as Record<string, unknown>);
   }
 );

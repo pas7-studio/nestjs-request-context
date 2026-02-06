@@ -7,6 +7,6 @@ import { CanActivate, ExecutionContext } from '@nestjs/common';
  * Throws ForbiddenException if no context is active
  */
 export declare class ContextGuard implements CanActivate {
-    canActivate(context: ExecutionContext): boolean;
+    canActivate(_context: ExecutionContext): boolean;
 }
 //# sourceMappingURL=context.guard.d.ts.map

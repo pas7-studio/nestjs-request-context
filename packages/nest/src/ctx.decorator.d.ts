@@ -3,6 +3,16 @@
  */
 import type { ContextKey } from '@pas7/request-context-core';
 /**
+ * Internal function to get context value by key
+ *
+ * @param key - Optional context key. If not provided, returns entire store
+ * @returns The context value or entire store
+ * @throws Error if no active context found
+ *
+ * @internal
+ */
+export declare function getContextValue<T>(key: ContextKey<T> | undefined): T | Record<string, unknown>;
+/**
  * Parameter decorator for injecting context values
  *
  * @example

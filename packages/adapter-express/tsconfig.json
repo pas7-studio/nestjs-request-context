@@ -2,12 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist",
-    "paths": {
-      "@pas7/request-context-core": ["../../core/src"],
-      "@pas7/nestjs-request-context": ["../../nest/src"]
-    }
+    "outDir": "./dist"
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }

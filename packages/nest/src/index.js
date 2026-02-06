@@ -8,7 +8,7 @@ export { RequestContextModule } from './request-context.module.js';
 // Service
 export { RequestContextService, MODULE_OPTIONS } from './request-context.service.js';
 // Decorators
-export { Ctx } from './ctx.decorator.js';
+export { Ctx, getContextValue } from './ctx.decorator.js';
 // Interceptors & Guards
 export { ContextInterceptor } from './context.interceptor.js';
 export { ContextGuard } from './context.guard.js';

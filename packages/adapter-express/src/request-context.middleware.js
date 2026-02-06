@@ -31,9 +31,7 @@ export function requestContextMiddleware(options) {
     return (req, res, next) => {
         // Get request ID from header or generate new one
         const headers = req.headers;
-        const requestId = typeof headers[headerName] === 'string'
-            ? headers[headerName]
-            : idGenerator();
+        const requestId = typeof headers[headerName] === 'string' ? headers[headerName] : idGenerator();
         // Optionally add request ID to response headers
         if (addResponseHeader) {
             res.setHeader(headerName, requestId);

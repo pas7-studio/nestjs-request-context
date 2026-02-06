@@ -5,10 +5,10 @@
  */
 
 // Module
-export { RequestContextModule } from './request-context.module.js';
+export { RequestContextModule, MODULE_OPTIONS } from './request-context.module.js';
 
 // Service
-export { RequestContextService, MODULE_OPTIONS } from './request-context.service.js';
+export { RequestContextService } from './request-context.service.js';
 
 // Decorators
 export { Ctx, getContextValue } from './ctx.decorator.js';
