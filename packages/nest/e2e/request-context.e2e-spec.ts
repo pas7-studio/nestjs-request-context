@@ -6,8 +6,8 @@ import { Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { RequestContextModule, Ctx, REQUEST_ID_KEY, ROUTE_KEY, METHOD_KEY } from './index.js';
-import { RequestContextService } from './request-context.service.js';
+import { RequestContextModule, Ctx, REQUEST_ID_KEY, ROUTE_KEY, METHOD_KEY } from '../src/index.js';
+import { RequestContextService } from '../src/request-context.service.js';
 
 @Controller()
 class TestController {
