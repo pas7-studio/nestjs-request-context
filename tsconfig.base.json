@@ -1,4 +1,12 @@
 {
+  "files": [],
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/nest" },
+    { "path": "./packages/adapter-express" },
+    { "path": "./packages/adapter-fastify" },
+    { "path": "./packages/testkit" }
+  ],
   "compilerOptions": {
     /* Basic Options */
     "target": "ES2022",
@@ -30,7 +38,13 @@
     "outDir": "./dist",
 
     /* Path Mapping */
-    "baseUrl": "."
-  },
-  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+    "baseUrl": ".",
+    "paths": {
+      "@pas7/request-context-core": ["./packages/core/src"],
+      "@pas7/nestjs-request-context": ["./packages/nest/src"],
+      "@pas7/nestjs-request-context-adapter-express": ["./packages/adapter-express/src"],
+      "@pas7/nestjs-request-context-adapter-fastify": ["./packages/adapter-fastify/src"],
+      "@pas7/nestjs-request-context-testkit": ["./packages/testkit/src"]
+    }
+  }
 }
