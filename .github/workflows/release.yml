@@ -38,14 +38,14 @@ jobs:
       - name: Type check
         run: pnpm typecheck
 
+      - name: Build
+        run: pnpm build
+
       - name: Test
         run: pnpm test
 
       - name: E2E Test
         run: pnpm test:e2e
-
-      - name: Build
-        run: pnpm build
 
       - name: Verify npm auth
         run: npm whoami
