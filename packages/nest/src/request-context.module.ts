@@ -111,19 +111,10 @@ export class RequestContextModule {
     const extraProviders: Provider[] = [];
 
     // Register ContextInterceptor and ContextGuard
-    // Use useFactory to conditionally provide APP_INTERCEPTOR based on useGlobalInterceptor option
     providers.push(ContextInterceptor, ContextGuard);
     extraProviders.push({
       provide: 'APP_INTERCEPTOR',
-      useFactory: (moduleOptions: RequestContextModuleOptions) => {
-        // If useGlobalInterceptor is explicitly false, return undefined (no interceptor)
-        if (moduleOptions.useGlobalInterceptor === false) {
-          return undefined;
-        }
-        // Otherwise, create a new instance of ContextInterceptor
-        return new ContextInterceptor();
-      },
-      inject: [MODULE_OPTIONS],
+      useClass: ContextInterceptor,
     });
 
     return {

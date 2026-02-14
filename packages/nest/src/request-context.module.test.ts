@@ -217,7 +217,7 @@ describe('RequestContextModule', () => {
 
       const moduleRef = RequestContextModule.forRootAsync(asyncOptions);
 
-      // forRootAsync always registers APP_INTERCEPTOR with useClass in current implementation
+      // forRootAsync always registers APP_INTERCEPTOR with useFactory in current implementation
       const appInterceptorProvider = moduleRef.providers.find(
         (p) =>
           typeof p === 'object' &&
@@ -227,7 +227,7 @@ describe('RequestContextModule', () => {
       );
 
       expect(appInterceptorProvider).toBeDefined();
-      // Current dist behavior: uses useClass, not useFactory
+      // forRootAsync uses useClass pattern (current implementation)
       expect(appInterceptorProvider).toEqual(
         expect.objectContaining({
           provide: 'APP_INTERCEPTOR',
@@ -275,7 +275,7 @@ describe('RequestContextModule', () => {
       );
 
       expect(appInterceptorProvider).toBeDefined();
-      // Note: Current dist uses useClass regardless of useGlobalInterceptor
+      // forRootAsync uses useClass pattern (current implementation)
       expect(appInterceptorProvider).toEqual(
         expect.objectContaining({
           provide: 'APP_INTERCEPTOR',
@@ -319,7 +319,7 @@ describe('RequestContextModule', () => {
 
       const moduleRef = RequestContextModule.forRootAsync(asyncOptions);
 
-      // Verify APP_INTERCEPTOR uses useClass pattern (current behavior)
+      // forRootAsync uses useClass pattern (current implementation)
       expect(moduleRef.providers).toContainEqual(
         expect.objectContaining({
           provide: 'APP_INTERCEPTOR',
