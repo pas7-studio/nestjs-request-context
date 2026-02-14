@@ -3,8 +3,8 @@
  */
 
 import { Injectable } from '@nestjs/common';
-import type { ContextKey } from '@pas7/request-context-core';
 import { get, set, has, require } from '@pas7/request-context-core';
+import { REQUEST_ID_KEY, ROUTE_KEY, METHOD_KEY } from './keys.js';
 
 /**
  * Service for accessing request context
@@ -57,7 +57,7 @@ export class RequestContextService {
    * @returns The request ID or undefined
    */
   static getRequestId(): string | undefined {
-    return RequestContextService.get({ name: 'requestId' } as ContextKey<string>);
+    return RequestContextService.get(REQUEST_ID_KEY);
   }
 
   /**
@@ -65,7 +65,7 @@ export class RequestContextService {
    * @returns The route or undefined
    */
   static getRoute(): string | undefined {
-    return RequestContextService.get({ name: 'route' } as ContextKey<string>);
+    return RequestContextService.get(ROUTE_KEY);
   }
 
   /**
@@ -73,6 +73,6 @@ export class RequestContextService {
    * @returns The method or undefined
    */
   static getMethod(): string | undefined {
-    return RequestContextService.get({ name: 'method' } as ContextKey<string>);
+    return RequestContextService.get(METHOD_KEY);
   }
 }

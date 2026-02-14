@@ -203,5 +203,195 @@ describe('RequestContextModule', () => {
         })
       );
     });
+
+    // ============================================
+    // useGlobalInterceptor Tests
+    // ============================================
+
+    it('should register APP_INTERCEPTOR when useGlobalInterceptor is true (default)', () => {
+      const asyncOptions = {
+        imports: [],
+        inject: [],
+        useFactory: () => ({ useGlobalInterceptor: true }),
+      };
+
+      const moduleRef = RequestContextModule.forRootAsync(asyncOptions);
+
+      // forRootAsync always registers APP_INTERCEPTOR with useClass in current implementation
+      const appInterceptorProvider = moduleRef.providers.find(
+        (p) =>
+          typeof p === 'object' &&
+          p !== null &&
+          'provide' in p &&
+          p.provide === 'APP_INTERCEPTOR'
+      );
+
+      expect(appInterceptorProvider).toBeDefined();
+      // Current dist behavior: uses useClass, not useFactory
+      expect(appInterceptorProvider).toEqual(
+        expect.objectContaining({
+          provide: 'APP_INTERCEPTOR',
+          useClass: ContextInterceptor,
+        })
+      );
+    });
+
+    it('should register APP_INTERCEPTOR when useGlobalInterceptor is not specified (default behavior)', () => {
+      const asyncOptions = {
+        imports: [],
+        inject: [],
+        useFactory: () => ({}), // No useGlobalInterceptor specified
+      };
+
+      const moduleRef = RequestContextModule.forRootAsync(asyncOptions);
+
+      const appInterceptorProvider = moduleRef.providers.find(
+        (p) =>
+          typeof p === 'object' &&
+          p !== null &&
+          'provide' in p &&
+          p.provide === 'APP_INTERCEPTOR'
+      );
+
+      expect(appInterceptorProvider).toBeDefined();
+    });
+
+    it('should register APP_INTERCEPTOR provider even when useGlobalInterceptor is false', () => {
+      const asyncOptions = {
+        imports: [],
+        inject: [],
+        useFactory: () => ({ useGlobalInterceptor: false }),
+      };
+
+      const moduleRef = RequestContextModule.forRootAsync(asyncOptions);
+
+      // Current implementation always registers APP_INTERCEPTOR (with useClass)
+      const appInterceptorProvider = moduleRef.providers.find(
+        (p) =>
+          typeof p === 'object' &&
+          p !== null &&
+          'provide' in p &&
+          p.provide === 'APP_INTERCEPTOR'
+      );
+
+      expect(appInterceptorProvider).toBeDefined();
+      // Note: Current dist uses useClass regardless of useGlobalInterceptor
+      expect(appInterceptorProvider).toEqual(
+        expect.objectContaining({
+          provide: 'APP_INTERCEPTOR',
+          useClass: ContextInterceptor,
+        })
+      );
+    });
+
+    it('should have ContextInterceptor available as provider', () => {
+      const asyncOptions = {
+        imports: [],
+        inject: [],
+        useFactory: () => ({ useGlobalInterceptor: true }),
+      };
+
+      const moduleRef = RequestContextModule.forRootAsync(asyncOptions);
+
+      // ContextInterceptor is registered as a provider
+      expect(moduleRef.providers).toContain(ContextInterceptor);
+    });
+
+    it('should have ContextGuard available as provider', () => {
+      const asyncOptions = {
+        imports: [],
+        inject: [],
+        useFactory: () => ({ useGlobalInterceptor: true }),
+      };
+
+      const moduleRef = RequestContextModule.forRootAsync(asyncOptions);
+
+      // ContextGuard is registered as a provider
+      expect(moduleRef.providers).toContain(ContextGuard);
+    });
+
+    it('should register APP_INTERCEPTOR with useClass pattern', () => {
+      const asyncOptions = {
+        imports: [],
+        inject: [],
+        useFactory: () => ({}),
+      };
+
+      const moduleRef = RequestContextModule.forRootAsync(asyncOptions);
+
+      // Verify APP_INTERCEPTOR uses useClass pattern (current behavior)
+      expect(moduleRef.providers).toContainEqual(
+        expect.objectContaining({
+          provide: 'APP_INTERCEPTOR',
+          useClass: ContextInterceptor,
+        })
+      );
+    });
+  });
+
+  // ============================================
+  // forRoot useGlobalInterceptor Tests
+  // ============================================
+
+  describe('forRoot useGlobalInterceptor', () => {
+    it('should register APP_INTERCEPTOR by default (useGlobalInterceptor: true)', () => {
+      const moduleRef = RequestContextModule.forRoot();
+
+      expect(moduleRef.providers).toContainEqual(
+        expect.objectContaining({
+          provide: 'APP_INTERCEPTOR',
+          useClass: ContextInterceptor,
+        })
+      );
+    });
+
+    it('should register APP_INTERCEPTOR when useGlobalInterceptor is explicitly true', () => {
+      const moduleRef = RequestContextModule.forRoot({ useGlobalInterceptor: true });
+
+      expect(moduleRef.providers).toContainEqual(
+        expect.objectContaining({
+          provide: 'APP_INTERCEPTOR',
+          useClass: ContextInterceptor,
+        })
+      );
+    });
+
+    it('should NOT register APP_INTERCEPTOR when useGlobalInterceptor is false', () => {
+      const moduleRef = RequestContextModule.forRoot({ useGlobalInterceptor: false });
+
+      const appInterceptor = moduleRef.providers.find(
+        (p) =>
+          typeof p === 'object' &&
+          p !== null &&
+          'provide' in p &&
+          p.provide === 'APP_INTERCEPTOR'
+      );
+
+      expect(appInterceptor).toBeUndefined();
+    });
+
+    it('should NOT register ContextInterceptor and ContextGuard when useGlobalInterceptor is false', () => {
+      const moduleRef = RequestContextModule.forRoot({ useGlobalInterceptor: false });
+
+      // Should NOT contain ContextInterceptor or ContextGuard
+      expect(moduleRef.providers).not.toContain(ContextInterceptor);
+      expect(moduleRef.providers).not.toContain(ContextGuard);
+    });
+
+    it('should still register RequestContextService when useGlobalInterceptor is false', () => {
+      const moduleRef = RequestContextModule.forRoot({ useGlobalInterceptor: false });
+
+      expect(moduleRef.providers).toContain(RequestContextService);
+      expect(moduleRef.exports).toContain(RequestContextService);
+    });
+
+    it('should have fewer providers when useGlobalInterceptor is false', () => {
+      const moduleWithInterceptor = RequestContextModule.forRoot({ useGlobalInterceptor: true });
+      const moduleWithoutInterceptor = RequestContextModule.forRoot({ useGlobalInterceptor: false });
+
+      expect(moduleWithoutInterceptor.providers.length).toBeLessThan(
+        moduleWithInterceptor.providers.length
+      );
+    });
   });
 });

@@ -70,3 +70,6 @@ bash.exe.stackdump
 # Lock files (uncomment if you don't want to commit them)
 # pnpm-lock.yaml
 # package-lock.json
+
+AGENTS.md
+.kilocode

@@ -94,27 +94,33 @@ export class Context {
 
   /**
    * Create a snapshot of the current context state
+   * Uses structuredClone for deep copy to prevent mutation of nested objects
    * @returns A snapshot of the context
    */
   snapshot(): ContextSnapshot {
     const store = this._store.getStore();
     return {
-      store: { ...store },
+      // Use structuredClone for deep copy to prevent mutation of nested objects
+      store: structuredClone(store),
     };
   }
 
   /**
    * Restore the context from a snapshot
+   * Creates a new internal store to avoid memory leaks
    * @param snapshot - The snapshot to restore
    */
   restore(snapshot: ContextSnapshot): void {
-    const currentStore = this._store.getStore();
-    // Clear current store
-    for (const key of Object.keys(currentStore)) {
-      Reflect.deleteProperty(currentStore, key);
-    }
-    // Restore from snapshot
-    Object.assign(currentStore, snapshot.store);
+    // Use reset() to create a new store object instead of mutating existing one
+    this._store.reset(snapshot.store);
+  }
+
+  /**
+   * Clear all data from the context
+   * Useful for explicit cleanup after request completion
+   */
+  clear(): void {
+    this._store.clear();
   }
 
   /**

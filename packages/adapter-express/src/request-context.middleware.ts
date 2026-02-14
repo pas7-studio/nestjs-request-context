@@ -15,6 +15,10 @@ import type { RequestContextExpressOptions } from './config.js';
  * - Optionally adds the request ID to response headers
  * - Maintains context across async operations
  *
+ * Note: Async errors in downstream middleware/handlers are NOT caught by try-catch
+ * in Express. Use Express error handling middleware or wrap async handlers.
+ * AsyncLocalStorage context is preserved across async boundaries automatically.
+ *
  * @param options - Middleware configuration options
  * @returns Express request handler middleware
  *
@@ -43,16 +47,11 @@ export function requestContextMiddleware(options?: RequestContextExpressOptions)
       res.setHeader(headerName, requestId);
     }
 
-    // Start request context by wrapping request handling
-    // We use async wrapper to ensure context is maintained across async operations
-    // Wrapping in a try-catch to handle errors properly
-    try {
-      run({ requestId }, () => {
-        next();
-      });
-    } catch (error) {
-      // Ensure error is passed to Express error handling
-      next(error);
-    }
+    // Start request context using AsyncLocalStorage
+    // Context is automatically maintained across async operations
+    // Note: Errors from async handlers must be handled by Express error middleware
+    run({ requestId }, () => {
+      next();
+    });
   };
 }

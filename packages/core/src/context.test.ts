@@ -184,4 +184,85 @@ describe('Context', () => {
       context.set(key, 'value2', 'deny');
     }).toThrow('already exists in store');
   });
+
+  // ============================================
+  // Snapshot Tests
+  // ============================================
+
+  it('snapshot() should return a copy of the store', () => {
+    const context = Context.create({ key1: 'value1', key2: 'value2' });
+    const snapshot = context.snapshot();
+
+    expect(snapshot.store).toBeDefined();
+    expect(snapshot.store.key1).toBe('value1');
+    expect(snapshot.store.key2).toBe('value2');
+  });
+
+  it('restore() should restore context from snapshot', () => {
+    const context = Context.create({ key1: 'original' });
+    const snapshot = context.snapshot();
+
+    context.set(new ContextKey<string>('key1'), 'modified');
+    expect(context.get(new ContextKey<string>('key1'))).toBe('modified');
+
+    context.restore(snapshot);
+    expect(context.get(new ContextKey<string>('key1'))).toBe('original');
+  });
+
+  it('restore() should remove keys added after snapshot', () => {
+    const context = Context.create({ key1: 'value1' });
+    const snapshot = context.snapshot();
+
+    context.set(new ContextKey<string>('key2'), 'value2');
+    expect(context.has(new ContextKey<string>('key2'))).toBe(true);
+
+    context.restore(snapshot);
+    expect(context.has(new ContextKey<string>('key2'))).toBe(false);
+  });
+
+  // ============================================
+  // Edge Cases
+  // ============================================
+
+  it('should handle empty snapshot restore', () => {
+    const context = Context.create({ key1: 'value1' });
+    const emptySnapshot = context.snapshot();
+
+    context.set(new ContextKey<string>('key2'), 'value2');
+    context.restore(emptySnapshot);
+
+    expect(context.get(new ContextKey<string>('key1'))).toBe('value1');
+  });
+
+  it('should handle multiple snapshot/restore cycles', () => {
+    const context = Context.create({ count: 0 });
+
+    const snap1 = context.snapshot();
+    context.set(new ContextKey<number>('count'), 1);
+
+    const snap2 = context.snapshot();
+    context.set(new ContextKey<number>('count'), 2);
+
+    context.restore(snap1);
+    expect(context.get(new ContextKey<number>('count'))).toBe(0);
+
+    context.restore(snap2);
+    expect(context.get(new ContextKey<number>('count'))).toBe(1);
+  });
+
+  it('should handle deeply nested initial data', () => {
+    const nestedData = {
+      level1: {
+        level2: {
+          level3: {
+            value: 'deep',
+          },
+        },
+      },
+    };
+    const context = Context.create({ nested: nestedData });
+
+    const result = context.get(new ContextKey<typeof nestedData>('nested'));
+    expect(result).toEqual(nestedData);
+  });
 });

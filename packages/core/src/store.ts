@@ -80,4 +80,22 @@ export class Store {
   getStore(): Record<string, unknown> {
     return this._store;
   }
+
+  /**
+   * Reset the store with new data, replacing all existing entries
+   * This creates a new internal store object to avoid memory leaks
+   * @param data - The new data for the store
+   */
+  reset(data: Record<string, unknown> = {}): void {
+    (this as { _store: Record<string, unknown> })._store = createEmptyStore();
+    Object.assign(this._store, data);
+  }
+
+  /**
+   * Clear all entries from the store
+   * Creates a new empty store object to avoid memory leaks
+   */
+  clear(): void {
+    (this as { _store: Record<string, unknown> })._store = createEmptyStore();
+  }
 }

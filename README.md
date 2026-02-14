@@ -4,9 +4,33 @@
 
 [![Release](https://img.shields.io/github/v/release/pas7-studio/nestjs-request-context?sort=semver&style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/releases)
 [![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-308-brightgreen?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml)
 [![Build Status](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml/badge.svg)](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/pas7-studio/nestjs-request-context?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/blob/main/LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-brightgreen)](https://www.typescriptlang.org/)
+
+## 🆕 What's New in v0.2.0
+
+### 🐛 Critical Bug Fixes
+
+| Issue | Description | Impact |
+|-------|-------------|--------|
+| **Fastify AsyncLocalStorage** | Plugin now uses sync hook with `done()` callback | Context loss fixed |
+| **Memory Leak** | `Context.restore()` creates new Map instead of mutating | No more memory leaks |
+| **Express async handling** | Removed ineffective try-catch in middleware | Proper error propagation |
+
+### ✨ New Features
+
+- **`Context.clear()`** - Explicit context cleanup method
+- **`useGlobalInterceptor` option** - Disable auto-registration in `forRootAsync()`
+- **Deep copy snapshot** - `Context.snapshot()` uses `structuredClone` to prevent mutation
+
+### 📈 Improvements
+
+- **Type safety** - `RequestContextService` uses `REQUEST_ID_KEY` constant
+- **Test coverage** - 59 new tests added (249 → 308 total)
+- **Memory leak tests** - New tests ensure no context leakage
+- **Deep copy tests** - Snapshot isolation verified
 
 ## 🎯 Problem Solved
 
@@ -43,7 +67,7 @@ Are you struggling with **request-scoped providers** in NestJS?
 - **Unified API** - same API for both adapters
 
 ### ✅ Production-Ready
-- **100% test coverage** - 246 tests prove reliability
+- **100% test coverage** - 308 tests prove reliability
 - **Battle-tested** - used in production by Pas7 team
 - **Well-documented** - comprehensive guides and examples
 - **Stable API** - SemVer with changesets
@@ -99,7 +123,7 @@ export class AppModule {
 - 🔒 **Type-safe** - Fully typed API with `ContextKey<T>`
 - ⚡ **Zero-overhead** - No per-request instances, 10x+ faster than request-scoped providers
 - 🎯 **Works with Express & Fastify** - Unified API for both platforms
-- ✅ **100% test coverage** - 246 tests prove reliability
+- ✅ **100% test coverage** - 308 tests prove reliability
 - 🚀 **Production-ready** - Battle-tested in production
 - 🔧 **Testkit included** - Easy testing with parallel request validation
 - 📚 **Comprehensive docs** - Quickstarts, API reference, and examples
@@ -376,6 +400,7 @@ interface RequestContextModuleOptions {
   header?: string; // default: 'x-request-id'
   idGenerator?: () => string; // default: crypto.randomUUID
   mode?: 'minimal' | 'standard'; // default: 'minimal'
+  useGlobalInterceptor?: boolean; // default: true
   keys?: {
     requestId?: string; // default: 'requestId'
     route?: string; // default: 'route'
@@ -383,6 +408,47 @@ interface RequestContextModuleOptions {
     ip?: string; // default: undefined
   };
 }
+```
+
+#### useGlobalInterceptor Option
+
+By default, the module automatically registers a global interceptor. Set `useGlobalInterceptor: false` to disable this behavior:
+
+```typescript
+@Module({
+  imports: [
+    RequestContextModule.forRoot({
+      mode: 'standard',
+      useGlobalInterceptor: false, // Disable auto-registration
+    }),
+  ],
+  providers: [
+    // Register your own interceptor if needed
+    {
+      provide: 'APP_INTERCEPTOR',
+      useClass: CustomContextInterceptor,
+    },
+  ],
+})
+export class AppModule {}
+```
+
+Or with `forRootAsync()`:
+
+```typescript
+@Module({
+  imports: [
+    RequestContextModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        mode: config.get('REQUEST_CONTEXT_MODE'),
+        useGlobalInterceptor: false,
+      }),
+    }),
+  ],
+})
+export class AppModule {}
 ```
 
 ### @Ctx(key?)
@@ -406,6 +472,55 @@ RequestContextService.require<T>(key: ContextKey<T>): T;
 RequestContextService.getRequestId(): string | undefined;
 RequestContextService.getRoute(): string | undefined;
 RequestContextService.getMethod(): string | undefined;
+```
+
+### Context Class
+
+Core context management class:
+
+```typescript
+// Get current active context
+Context.current(): Context | undefined;
+
+// Instance methods
+context.get<T>(key: ContextKey<T>): T | undefined;
+context.set<T>(key: ContextKey<T>, value: T, policy?: 'overwrite' | 'deny' | 'ignore'): void;
+context.has<T>(key: ContextKey<T>): boolean;
+context.require<T>(key: ContextKey<T>): T;
+context.merge(data: Record<string, unknown>, policy?: SetPolicy): void;
+
+// Snapshot & Restore (uses structuredClone for deep copy)
+context.snapshot(): ContextSnapshot;
+context.restore(snapshot: ContextSnapshot): void;
+
+// Explicit cleanup (v0.2.0+)
+context.clear(): void;
+
+// Run function within context
+context.run<T>(fn: () => T): T;
+```
+
+#### Context Snapshot & Restore
+
+The `snapshot()` method uses `structuredClone` for deep copy, preventing mutation of nested objects:
+
+```typescript
+// Take a snapshot
+const snapshot = context.snapshot();
+
+// ... modifications happen ...
+
+// Restore to previous state (creates new internal store to avoid memory leaks)
+context.restore(snapshot);
+```
+
+#### Context Clear
+
+Use `clear()` for explicit cleanup after request completion:
+
+```typescript
+// Clear all data from context
+context.clear();
 ```
 
 ## Packages

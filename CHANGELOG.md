@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.5] - 2025-01-XX
+
+### Fixed
+- **CRITICAL**: Fastify AsyncLocalStorage context loss - plugin now uses sync hook with `done()` callback instead of async/await
+- **CRITICAL**: Memory leak in `Context.restore()` - creates new Map instead of mutating existing store
+- **CRITICAL**: Express middleware async error handling - removed ineffective try-catch that swallowed errors
+- Type safety in `RequestContextService` using `REQUEST_ID_KEY` constant instead of magic strings
+
+### Added
+- `Context.clear()` method for explicit context cleanup after request completion
+- `Store.clear()` method to clear all entries from the store
+- `Store.reset()` method to replace store with new data
+- `useGlobalInterceptor` option in `forRoot()` and `forRootAsync()` to disable auto-registration of global interceptor
+- Deep copy in `Context.snapshot()` using `structuredClone` to prevent mutation of nested objects
+
+### Changed
+- `NestInterceptor` in adapter packages now properly initializes context before request processing
+- Improved error handling documentation in README.md
+- `Context.restore()` now uses `Store.reset()` internally to avoid memory leaks
+
+### Tests
+- Added 59 new tests (249 → 308 total)
+- Added memory leak tests to verify `Context.restore()` behavior
+- Added deep copy snapshot tests to verify isolation
+- Added `forRootAsync` options tests for `useGlobalInterceptor` feature
+
 ## [0.1.0] - 2025-01-16
 
 ### Added

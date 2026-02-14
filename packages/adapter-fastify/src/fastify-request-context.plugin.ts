@@ -2,7 +2,7 @@
  * Fastify plugin for request context management
  */
 
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import type { FastifyInstance, FastifyRequest, FastifyReply, HookHandlerDoneFunction } from 'fastify';
 import { run } from '@pas7/request-context-core';
 import type { RequestContextFastifyOptions } from './config.js';
 
@@ -11,9 +11,13 @@ import type { RequestContextFastifyOptions } from './config.js';
  *
  * The plugin:
  * - Extracts or generates a request ID
- * - Starts the request context using core.run() with callback
+ * - Starts the request context using AsyncLocalStorage
  * - Optionally adds the request ID to response headers
  * - Maintains AsyncLocalStorage throughout request lifecycle
+ *
+ * IMPORTANT: Uses synchronous onRequest hook with done() callback pattern
+ * to preserve AsyncLocalStorage context through the entire request lifecycle.
+ * Async hooks would lose context when the hook function completes.
  *
  * @param fastify - Fastify instance
  * @param options - Plugin configuration options
@@ -27,27 +31,24 @@ export async function requestContextPlugin(
   const idGenerator = options.idGenerator ?? (() => crypto.randomUUID());
   const addResponseHeader = options.addResponseHeader ?? true;
 
-  // Register onRequest hook
-  // The hook creates context and wraps the request lifecycle
-  fastify.addHook('onRequest', async (request: FastifyRequest, reply: FastifyReply) => {
+  // Register synchronous onRequest hook with done() callback
+  // Using sync hook with callback preserves AsyncLocalStorage context
+  // through the entire request lifecycle including route handlers
+  fastify.addHook('onRequest', (request: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
     // Get request ID from header or generate new one
     const headers = request.headers as Record<string, string | string[] | undefined>;
     const requestId = typeof headers[headerName] === 'string' ? headers[headerName] : idGenerator();
-
-    // Store request ID in request object
-    (request as FastifyRequest & { requestId?: string }).requestId = requestId;
 
     // Optionally add request ID to response headers
     if (addResponseHeader) {
       reply.header(headerName, requestId);
     }
 
-    // Start request context using AsyncLocalStorage
-    // We need to wrap the entire request lifecycle
-    return run({ requestId }, async () => {
-      // Context is active, but will be lost when this function completes
-      // We cannot directly wrap route handler from here
-      // This is a known limitation with Fastify hooks and AsyncLocalStorage
+    // Start request context using AsyncLocalStorage with callback pattern
+    // The done() callback is called within the context, preserving it
+    // through the entire request lifecycle
+    run({ requestId }, () => {
+      done();
     });
   });
 }
