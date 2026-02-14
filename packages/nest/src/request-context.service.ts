@@ -3,7 +3,7 @@
  */
 
 import { Injectable } from '@nestjs/common';
-import { get, set, has, require } from '@pas7/request-context-core';
+import { get, set, has, require, ContextKey } from '@pas7/request-context-core';
 import { REQUEST_ID_KEY, ROUTE_KEY, METHOD_KEY } from './keys.js';
 
 /**
