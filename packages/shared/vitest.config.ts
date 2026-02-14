@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import path from 'path';
 
 export default defineConfig({
   test: {
@@ -14,6 +15,11 @@ export default defineConfig({
         '**/*.spec.ts',
         '**/*.d.ts',
       ],
+    },
+  },
+  resolve: {
+    alias: {
+      '@pas7/request-context-core': path.resolve(__dirname, '../core/src/index.ts'),
     },
   },
 });

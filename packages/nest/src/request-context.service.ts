@@ -1,3 +1,4 @@
+// File: packages/nest/src/request-context.service.ts
 /**
  * Injectable service providing static access to request context
  */
