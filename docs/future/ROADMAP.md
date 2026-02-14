@@ -1,164 +1,101 @@
-# Roadmap
+# Product Roadmap
 
-## Overview
+This document describes the planned product direction for `@pas7/nestjs-request-context`.
 
-This document outlines the planned future development of `@pas7/nestjs-request-context`.
+The roadmap is version-based and intentionally does not include calendar dates.
 
-## Version History
+## Guiding Direction
 
-### v0.1.0 (Current) - MVP Release
-- ✅ Core context management with AsyncLocalStorage
-- ✅ NestJS integration with decorators & interceptors
-- ✅ Express adapter (fully supported)
-- ✅ Fastify adapter (middleware pattern, limited plugin support)
-- ✅ Testkit for context validation
-- ✅ 100% test coverage for core, Nest, and Express adapter
-- ✅ Documentation and examples
+- Prioritize developer experience and maintainability first
+- Keep runtime overhead near parity with native alternatives
+- Provide practical production tooling (migration, diagnostics, observability)
+- Preserve API stability and predictable upgrade paths
 
-## Planned Features
+## v0.4 - DX Foundation
 
-### v0.2.0 - Distributed Tracing Support
-**Estimated:** Q2 2024
+Focus: reduce adoption friction and improve day-1 usability.
 
-Features:
-- Trace context propagation (trace ID, span ID)
-- Manual trace propagation API
-- Basic integration with OpenTelemetry
-- W3C Trace Context format support
+Planned items:
 
-Acceptance Criteria:
-- [ ] Trace context storage and retrieval
-- [ ] Manual trace propagation
-- [ ] Integration hooks for tracing libraries
-- [ ] Documentation and examples
+- Migration guide from NestJS request-scoped providers
+- Troubleshooting guide for common context issues
+- Recommended architecture patterns for controllers/services
+- Production-ready recipes: correlation ID propagation, tenant and locale context, audit logging enrichment
+- Expanded testkit examples for parallel isolation checks
 
-**Complexity:** Medium
-**Impact:** High (enables microservices tracing)
+Success criteria:
 
-### v0.3.0 - Debugging Tools
-**Estimated:** Q3 2024
+- New users can complete setup and first working flow quickly
+- Fewer support issues about missing context/middleware order
+- Clear migration path for existing NestJS codebases
 
-Features:
-- Context Inspector for development
-- Request Tracing
-- Context Leak Detection
-- Performance Profiling
+## v0.5 - Operational Tooling
 
-Acceptance Criteria:
-- [ ] Context Inspector implementation
-- [ ] Leak detection with configurable threshold
-- [ ] Performance profiling with sampling
-- [ ] Integration with NestJS debug mode
-- [ ] Documentation and examples
+Focus: improve visibility and confidence in production.
 
-**Complexity:** Medium
-**Impact:** High (improves developer experience)
+Planned items:
 
-### v0.4.0 - Enhanced Fastify Support
-**Estimated:** Q3 2024
+- Optional debug mode for context lifecycle diagnostics
+- Typed key registry helper (for large-team consistency)
+- Logging bridge examples/integrations (Pino/Winston)
+- OpenTelemetry integration recipes
+- Better compatibility matrix for NestJS lifecycle hooks
 
-Features:
-- Improved Fastify adapter with custom lifecycle wrapper
-- Alternative storage mechanism for Fastify
-- Full compatibility with Fastify plugins
+Success criteria:
 
-Acceptance Criteria:
-- [ ] Custom lifecycle wrapper implementation
-- [ ] Alternative storage mechanism
-- [ ] Full plugin support for Fastify
-- [ ] E2E tests with 100+ parallel requests
+- Faster root-cause analysis for context bugs
+- Less key naming drift and key-collision risk
+- Easier observability integration without custom boilerplate
 
-**Complexity:** High
-**Impact:** Medium (removes Fastify limitations)
+## v0.6 - Platform Hardening
 
-### v0.5.0 - Advanced Context Features
-**Estimated:** Q4 2024
+Focus: reliability and ecosystem readiness.
 
-Features:
-- Context merging with conflict resolution strategies
-- Context snapshotting for async operations
-- Context propagation to background jobs
-- Context-aware logging interceptors
+Planned items:
 
-Acceptance Criteria:
-- [ ] Advanced merge strategies
-- [ ] Snapshot & restore API
-- [ ] Background job propagation
-- [ ] Logging interceptors
-- [ ] Documentation and examples
+- Stronger Fastify guidance and validation scenarios
+- Performance guardrails in CI (regression thresholds)
+- Extended benchmarks against common alternatives
+- Security/documentation guidance for sensitive context data
+- More complete enterprise rollout checklist
 
-**Complexity:** Medium
-**Impact:** Medium (adds advanced features)
+Success criteria:
 
-### v1.0.0 - Production-Ready Release
-**Estimated:** Q1 2025
+- Regression detection becomes automatic in CI
+- Performance stays stable across releases
+- Teams can adopt with a documented rollout process
 
-Features:
-- All v0.x features stabilized
-- Complete TypeScript documentation
-- Performance benchmarking suite
-- Migration guide from v0.x
-- Breaking changes documented
+## v1.0 - Stability Milestone
 
-Acceptance Criteria:
-- [ ] All features stable and tested
-- [ ] Complete API documentation
-- [ ] Performance benchmarks
-- [ ] Migration guide
-- [ ] 100% test coverage
-- [ ] E2E tests for all platforms
+Focus: stable long-term contract and mature docs.
 
-**Complexity:** Low
-**Impact:** High (stable production release)
+Planned items:
 
-## Future Considerations
+- API stabilization and deprecation policy
+- Complete docs pass (reference + guides + migration notes)
+- Clear support policy for supported Node/Nest versions
+- Release quality checklist and compatibility guarantees
 
-### Potential Features (Not Planned Yet)
+Success criteria:
 
-- **Redis-based Context**: Distribute context across multiple instances
-- **GraphQL Integration**: Context propagation in GraphQL resolvers
-- **WebSocket Support**: Context management for WebSocket connections
-- **Context Analytics**: Analytics on context usage patterns
-- **Context Security**: Encryption and access control for sensitive context data
+- Predictable upgrades with minimal surprises
+- Documentation is sufficient for enterprise onboarding
+- Strong confidence in production usage
 
-### Dependencies on External Libraries
+## Backlog Candidates
 
-- OpenTelemetry SDK for distributed tracing
-- Additional tracing library integrations (Zipkin, Jaeger, etc.)
-- Logging library integrations (Winston, Pino, etc.)
+These items are valuable but not committed to a specific version:
 
-### Performance Targets
+- GraphQL and WebSocket context recipes
+- Distributed context patterns for multi-instance systems
+- Additional logging and tracing ecosystem adapters
+- Advanced context governance (allowlist/denylist/redaction)
 
-- Context initialization: < 1ms
-- Context access: < 0.1ms
-- Memory overhead: < 1KB per request
-- Zero impact when unused
+## Change Policy
 
-### Community Contributions
+The roadmap is a living document and may be adjusted based on:
 
-We welcome community contributions for:
-- Bug fixes
-- Performance improvements
-- New adapters (GraphQL, WebSocket, etc.)
-- Documentation improvements
-- Examples and tutorials
-
-See [CONTRIBUTING.md](../../CONTRIBUTING.md) for contribution guidelines.
-
-## Change Process
-
-This roadmap is a living document. Changes will be made based on:
-- Community feedback
-- Issue reports and feature requests
-- Technological advancements
-- Market demands
-
-Major changes will be communicated through:
-- GitHub issues
-- Release notes
-- Blog posts
-- Community discussions
-
-## Conclusion
-
-The roadmap provides a clear path from the current MVP (v0.1) to a production-ready library with advanced features (v1.0). The phased approach ensures incremental improvements while maintaining stability and backward compatibility.
+- User feedback
+- Production findings
+- Ecosystem and platform changes
+- Maintenance and reliability priorities

@@ -211,6 +211,7 @@ See `KNOWN_LIMITATIONS.md` for framework-specific notes.
 
 - Root docs: `README.md`
 - Changelog: `CHANGELOG.md`
+- Roadmap: `docs/future/ROADMAP.md`
 - Examples: `examples/express-app` and `examples/fastify-app`
 - Package docs: `packages/nest/README.md`, `packages/adapter-express/README.md`, `packages/adapter-fastify/README.md`, `packages/core/README.md`, `packages/shared/README.md`, `packages/testkit/README.md`
 
