@@ -2,10 +2,8 @@
  * NestJS interceptor for Fastify request context
  */
 
-import type { NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import { Injectable } from '@nestjs/common';
-import type { Observable } from 'rxjs';
-import { run } from '@pas7/request-context-core';
+import type { NestInterceptor } from '@nestjs/common';
+import { createRequestContextInterceptor } from '@pas7/nestjs-request-context-shared';
 import type { RequestContextFastifyOptions } from './config.js';
 
 /**
@@ -23,23 +21,5 @@ import type { RequestContextFastifyOptions } from './config.js';
 export function UseRequestContextFastify(
   options?: RequestContextFastifyOptions
 ): new () => NestInterceptor {
-  // Pre-resolve options to avoid allocations in hot path
-  const headerName = options?.header ?? 'x-request-id';
-  const idGenerator = options?.idGenerator ?? (() => crypto.randomUUID());
-
-  @Injectable()
-  class RequestContextInterceptor implements NestInterceptor {
-    intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-      const httpContext = context.switchToHttp();
-      const request = httpContext.getRequest<{ headers: Record<string, string | undefined> }>();
-
-      // Get request ID from header or generate new one
-      const requestId = request.headers[headerName] ?? idGenerator();
-
-      // Run the handler within the request context
-      return run({ requestId }, () => next.handle());
-    }
-  }
-
-  return RequestContextInterceptor;
+  return createRequestContextInterceptor(options);
 }

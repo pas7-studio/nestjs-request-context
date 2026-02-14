@@ -4,7 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.3.5] - 2025-01-XX
+## [0.3.6] - 2025-01-21
+
+### Added
+- **New package**: `@pas7/nestjs-request-context-shared` with shared types and utilities for adapters
+- `RequestContextAdapterOptions` interface for adapter configuration
+- `createRequestContextInterceptor()` factory function for unified interceptor creation
+- `KeyExistsError` class for type-safe error handling when key already exists in context
+
+### Changed
+- Replaced string matching with `instanceof KeyExistsError` in [`api.ts`](packages/core/src/api.ts) for better type safety
+- Removed `readonly` modifier from `_store` in [`Store`](packages/core/src/store.ts) class to allow reset operations
+- Removed unused `_type` field from `ContextKey` class for cleaner API
+- Unified interceptor logic between Express and Fastify adapters using shared factory function
+
+### Fixed
+- Fixed type assertion workaround in `Store.reset()` method
+- Improved TypeScript type safety across core and adapter packages
+
+## [0.3.5] - 2025-01-19
 
 ### Fixed
 - **CRITICAL**: Fastify AsyncLocalStorage context loss - plugin now uses sync hook with `done()` callback instead of async/await

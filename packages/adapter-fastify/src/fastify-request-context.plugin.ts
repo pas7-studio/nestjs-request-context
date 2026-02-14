@@ -2,7 +2,12 @@
  * Fastify plugin for request context management
  */
 
-import type { FastifyInstance, FastifyRequest, FastifyReply, HookHandlerDoneFunction } from 'fastify';
+import type {
+  FastifyInstance,
+  FastifyRequest,
+  FastifyReply,
+  HookHandlerDoneFunction,
+} from 'fastify';
 import { run } from '@pas7/request-context-core';
 import type { RequestContextFastifyOptions } from './config.js';
 
@@ -34,21 +39,25 @@ export async function requestContextPlugin(
   // Register synchronous onRequest hook with done() callback
   // Using sync hook with callback preserves AsyncLocalStorage context
   // through the entire request lifecycle including route handlers
-  fastify.addHook('onRequest', (request: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
-    // Get request ID from header or generate new one
-    const headers = request.headers as Record<string, string | string[] | undefined>;
-    const requestId = typeof headers[headerName] === 'string' ? headers[headerName] : idGenerator();
+  fastify.addHook(
+    'onRequest',
+    (request: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
+      // Get request ID from header or generate new one
+      const headers = request.headers as Record<string, string | string[] | undefined>;
+      const requestId =
+        typeof headers[headerName] === 'string' ? headers[headerName] : idGenerator();
 
-    // Optionally add request ID to response headers
-    if (addResponseHeader) {
-      reply.header(headerName, requestId);
+      // Optionally add request ID to response headers
+      if (addResponseHeader) {
+        reply.header(headerName, requestId);
+      }
+
+      // Start request context using AsyncLocalStorage with callback pattern
+      // The done() callback is called within the context, preserving it
+      // through the entire request lifecycle
+      run({ requestId }, () => {
+        done();
+      });
     }
-
-    // Start request context using AsyncLocalStorage with callback pattern
-    // The done() callback is called within the context, preserving it
-    // through the entire request lifecycle
-    run({ requestId }, () => {
-      done();
-    });
-  });
+  );
 }

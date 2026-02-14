@@ -1,6 +1,6 @@
 {
   "name": "@pas7/nestjs-request-context",
-  "version": "0.3.0",
+  "version": "0.3.6",
   "description": "NestJS integration for request context management",
   "homepage": "https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/nest",
   "repository": {

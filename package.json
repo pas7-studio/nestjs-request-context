@@ -1,6 +1,6 @@
 {
   "name": "@pas7/nestjs-request-context-monorepo",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "private": true,
   "description": "Zero-overhead request context management for NestJS without request-scoped providers using AsyncLocalStorage",
   "keywords": [
@@ -40,7 +40,8 @@
     "changeset": "changeset",
     "version": "changeset version",
     "release": "changeset publish",
-    "test:e2e": "pnpm -r --filter @pas7/nestjs-request-context-adapter-express --filter @pas7/nestjs-request-context-adapter-fastify --filter @pas7/nestjs-request-context-testkit test:e2e && pnpm --filter @pas7/nestjs-request-context test"
+    "test:e2e": "pnpm -r --filter @pas7/nestjs-request-context-adapter-express --filter @pas7/nestjs-request-context-adapter-fastify --filter @pas7/nestjs-request-context-testkit test:e2e && pnpm --filter @pas7/nestjs-request-context test",
+    "bench:request-context": "node --expose-gc scripts/benchmark/request-context-vs-request-scoped.cjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
@@ -50,6 +51,7 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "nestjs-cls": "^6.2.0",
     "prettier": "^3.3.3",
     "tsup": "^8.3.0",
     "typescript": "^5.5.4",

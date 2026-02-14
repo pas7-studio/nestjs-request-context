@@ -1,6 +1,6 @@
 {
   "name": "@pas7/nestjs-request-context-adapter-fastify",
-  "version": "0.3.0",
+  "version": "0.3.6",
   "description": "Fastify adapter for NestJS request context",
   "homepage": "https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/adapter-fastify",
   "repository": {
@@ -37,6 +37,7 @@
     "@nestjs/platform-fastify": "^10.0.0 || ^11.0.0"
   },
   "dependencies": {
+    "@pas7/nestjs-request-context-shared": "workspace:*",
     "@pas7/request-context-core": "workspace:*",
     "@pas7/nestjs-request-context": "workspace:*"
   },

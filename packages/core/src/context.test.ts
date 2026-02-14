@@ -78,7 +78,7 @@ describe('Context', () => {
     const context = Context.create({ key1: 'value1' });
     expect(() => {
       context.merge({ key1: 'new-value1', key2: 'value2' }, 'deny');
-    }).toThrow('already exists in store');
+    }).toThrow('already exists in context');
   });
 
   it('should merge data with ignore policy', () => {
@@ -182,7 +182,7 @@ describe('Context', () => {
     context.set(key, 'value1', 'overwrite');
     expect(() => {
       context.set(key, 'value2', 'deny');
-    }).toThrow('already exists in store');
+    }).toThrow('already exists in context');
   });
 
   // ============================================

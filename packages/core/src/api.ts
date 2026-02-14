@@ -4,6 +4,7 @@
 
 import type { ContextKey, SetPolicy } from './contracts.js';
 import { ContextNotActiveError, ContextKeyCollisionError } from './errors.js';
+import { KeyExistsError } from './key-exists-error.js';
 import type { ContextSnapshot } from './snapshot.js';
 import { Context } from './context.js';
 
@@ -54,7 +55,7 @@ export function set<T>(key: ContextKey<T>, value: T, policy: SetPolicy = 'overwr
   try {
     context.set(key, value, policy);
   } catch (error) {
-    if (error instanceof Error && error.message.includes('already exists')) {
+    if (error instanceof KeyExistsError) {
       throw new ContextKeyCollisionError(key.name);
     }
     throw error;
@@ -86,10 +87,18 @@ export function require<T>(key: ContextKey<T>): T {
  * Merge multiple key-value pairs into the current context
  * @param data - The data to merge
  * @param policy - The policy to use when keys already exist (default: 'overwrite')
+ * @throws ContextKeyCollisionError if any key already exists and policy is 'deny'
  */
 export function merge(data: Record<string, unknown>, policy: SetPolicy = 'overwrite'): void {
   const context = getCurrentContext();
-  context.merge(data, policy);
+  try {
+    context.merge(data, policy);
+  } catch (error) {
+    if (error instanceof KeyExistsError) {
+      throw new ContextKeyCollisionError(error.key);
+    }
+    throw error;
+  }
 }
 
 /**

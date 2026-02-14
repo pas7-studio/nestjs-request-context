@@ -252,11 +252,11 @@ describe('merge', () => {
     });
   });
 
-  it('should throw with deny policy on existing keys', () => {
+  it('should throw ContextKeyCollisionError with deny policy on existing keys', () => {
     run({ key1: 'value1' }, () => {
       expect(() => {
         merge({ key1: 'new-value1', key2: 'value2' }, 'deny');
-      }).toThrow('already exists in store');
+      }).toThrow(ContextKeyCollisionError);
     });
   });
 });

@@ -1,0 +1,66 @@
+{
+  "name": "@pas7/nestjs-request-context-shared",
+  "version": "0.3.6",
+  "description": "Shared types and utilities for @pas7/nestjs-request-context adapters",
+  "homepage": "https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/shared",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pas7-studio/nestjs-request-context.git",
+    "directory": "packages/shared"
+  },
+  "bugs": {
+    "url": "https://github.com/pas7-studio/nestjs-request-context/issues"
+  },
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src/",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "nestjs",
+    "request-context",
+    "shared",
+    "types"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0 || ^11.0.0",
+    "@pas7/request-context-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@pas7/request-context-core": "workspace:*"
+  }
+}

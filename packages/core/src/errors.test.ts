@@ -3,9 +3,16 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { ContextNotActiveError, ContextKeyCollisionError, ContextMissingError } from './errors.js';
-import { run, get, set, require } from './api.js';
+import * as errorsModule from './errors.js';
+import { KeyExistsError } from './key-exists-error.js';
 import { ContextKey } from './contracts.js';
+
+// Debug: log all exports
+console.log('[errors.test.ts] All exports from errors.ts:', Object.keys(errorsModule));
+console.log('[errors.test.ts] KeyExistsError from errors.ts:', errorsModule.KeyExistsError);
+console.log('[errors.test.ts] KeyExistsError from key-exists-error.ts:', KeyExistsError);
+
+const { ContextNotActiveError, ContextKeyCollisionError, ContextMissingError } = errorsModule;
 
 describe('ContextNotActiveError', () => {
   it('should create error with correct message', () => {
@@ -82,37 +89,51 @@ describe('ContextMissingError', () => {
   });
 });
 
-describe('Error throwing in API', () => {
-  it('ContextNotActiveError should be thrown outside run', () => {
-    expect(() => {
-      get(new ContextKey<string>('test'));
-    }).toThrow(ContextNotActiveError);
+describe('KeyExistsError', () => {
+  it('should import KeyExistsError correctly', () => {
+    // Debug: check what is imported
+    console.log('KeyExistsError:', KeyExistsError);
+    console.log('typeof KeyExistsError:', typeof KeyExistsError);
+    console.log('KeyExistsError.prototype:', KeyExistsError?.prototype);
+    expect(KeyExistsError).toBeDefined();
+    expect(typeof KeyExistsError).toBe('function');
   });
 
-  it('ContextKeyCollisionError should be thrown with deny policy', () => {
-    run({ test: 'value' }, () => {
-      expect(() => {
-        set(new ContextKey<string>('test'), 'new-value', 'deny');
-      }).toThrow(ContextKeyCollisionError);
-    });
+  it('should create error with key in message', () => {
+    const error = new KeyExistsError('test-key');
+    expect(error.message).toBe('Key "test-key" already exists in context');
+    expect(error.name).toBe('KeyExistsError');
   });
 
-  it('ContextMissingError should be thrown for require with missing key', () => {
-    run({}, () => {
-      expect(() => {
-        require(new ContextKey<string>('missing-key'));
-      }).toThrow(ContextMissingError);
-    });
+  it('should create error with custom message', () => {
+    const error = new KeyExistsError('test-key', 'Custom error message');
+    expect(error.message).toBe('Custom error message');
+    expect(error.name).toBe('KeyExistsError');
+    expect(error.key).toBe('test-key');
   });
 
-  it('Error instances should have correct stack traces', () => {
-    try {
-      run({}, () => {
-        require(new ContextKey<string>('missing-key'));
-      });
-    } catch (error) {
-      expect(error).toBeInstanceOf(ContextMissingError);
-      expect(error).toHaveProperty('stack');
-    }
+  it('should be instance of Error', () => {
+    const error = new KeyExistsError('test-key');
+    expect(error).toBeInstanceOf(Error);
+    expect(error).toBeInstanceOf(KeyExistsError);
+  });
+
+  it('should have correct prototype chain', () => {
+    const error = new KeyExistsError('test-key');
+    expect(Object.getPrototypeOf(error)).toBe(KeyExistsError.prototype);
+  });
+
+  it('should expose key property', () => {
+    const error = new KeyExistsError('my-key');
+    expect(error.key).toBe('my-key');
+  });
+
+  it('should handle different key names', () => {
+    const error1 = new KeyExistsError('key1');
+    const error2 = new KeyExistsError('another-key');
+    expect(error1.message).toContain('key1');
+    expect(error2.message).toContain('another-key');
   });
 });
+
+// Error throwing tests are in api.test.ts to avoid circular imports

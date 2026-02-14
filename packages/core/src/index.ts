@@ -8,5 +8,6 @@ export { ContextKey } from './contracts.js';
 export type { SetPolicy, Store } from './contracts.js';
 export type { ContextSnapshot } from './snapshot.js';
 export { ContextNotActiveError, ContextKeyCollisionError, ContextMissingError } from './errors.js';
+export { KeyExistsError } from './key-exists-error.js';
 export { Context } from './context.js';
 export { run, get, set, has, require, merge, snapshot, restore } from './api.js';

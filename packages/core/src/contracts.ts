@@ -4,12 +4,11 @@
 
 /**
  * Typed key for accessing store values without stringly-typed access
- * @template T - The type of value stored under this key
+ * @template T - The type of value stored under this key (compile-time only)
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class ContextKey<T = unknown> {
   readonly name: string;
-  // Type parameter T is used for type-safe access, not runtime
-  readonly _type?: T;
 
   constructor(name: string) {
     this.name = name;

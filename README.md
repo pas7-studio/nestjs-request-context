@@ -1,329 +1,131 @@
 # @pas7/nestjs-request-context
 
-**Zero-overhead request context management for NestJS without request-scoped providers** | TypeScript | NestJS
+Zero-overhead request context for NestJS based on Node.js AsyncLocalStorage.
 
 [![Release](https://img.shields.io/github/v/release/pas7-studio/nestjs-request-context?sort=semver&style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/releases)
+[![Build Status](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml/badge.svg)](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml)
 [![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/tests-308-brightgreen?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml)
-[![Build Status](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml/badge.svg)](https://github.com/pas7-studio/nestjs-request-context/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/pas7-studio/nestjs-request-context?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/blob/main/LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-brightgreen)](https://www.typescriptlang.org/)
 
-## 🆕 What's New in v0.2.0
+## Why this package
 
-### 🐛 Critical Bug Fixes
+NestJS request-scoped providers are convenient but expensive under load: new instances per request, more DI work, and more memory churn.
 
-| Issue | Description | Impact |
-|-------|-------------|--------|
-| **Fastify AsyncLocalStorage** | Plugin now uses sync hook with `done()` callback | Context loss fixed |
-| **Memory Leak** | `Context.restore()` creates new Map instead of mutating | No more memory leaks |
-| **Express async handling** | Removed ineffective try-catch in middleware | Proper error propagation |
+`@pas7/nestjs-request-context` keeps request data in AsyncLocalStorage and gives you:
 
-### ✨ New Features
+- Near-zero runtime overhead in practical benchmarks
+- Type-safe context access with `ContextKey<T>`
+- Stable behavior across async/await chains
+- Support for both NestJS + Express and NestJS + Fastify
 
-- **`Context.clear()`** - Explicit context cleanup method
-- **`useGlobalInterceptor` option** - Disable auto-registration in `forRootAsync()`
-- **Deep copy snapshot** - `Context.snapshot()` uses `structuredClone` to prevent mutation
+## Key features
 
-### 📈 Improvements
+- AsyncLocalStorage-based context lifecycle
+- Strong typing via `ContextKey<T>` and typed access APIs
+- NestJS-first API: `RequestContextModule`, `RequestContextService`, `@Ctx()`
+- Adapter support for both `@nestjs/platform-express` and `@nestjs/platform-fastify`
+- Snapshot/restore utilities for advanced flows and testing
+- Dedicated testkit for parallel-request isolation checks
 
-- **Type safety** - `RequestContextService` uses `REQUEST_ID_KEY` constant
-- **Test coverage** - 59 new tests added (249 → 308 total)
-- **Memory leak tests** - New tests ensure no context leakage
-- **Deep copy tests** - Snapshot isolation verified
+## Why this matters in real projects
 
-## 🎯 Problem Solved
+- Keep services singleton-friendly while still accessing request metadata
+- Avoid spreading `Request` objects through business-layer method signatures
+- Standardize request ID/correlation ID handling across modules
+- Reduce accidental context leaks in async workflows
+- Make observability use cases (logs, tracing, audit) easier to implement consistently
 
-Are you struggling with **request-scoped providers** in NestJS?
+Typical covered use cases:
 
-❌ **Request-scoped providers** in NestJS have significant performance overhead:
-- New instance created for every request
-- Dependency injection overhead for each dependency
-- Memory pressure from multiple instances
-- Slower application startup
+- Correlation ID and distributed trace propagation
+- Tenant ID / locale / auth claims access in deep service layers
+- Audit logging with request metadata enrichment
+- Safe parallel request handling in tests and production paths
 
-✅ **@pas7/nestjs-request-context** provides a **zero-overhead solution** using **AsyncLocalStorage**:
-- **10x+ faster** than request-scoped providers
-- **No per-request instance creation**
-- **Minimal memory footprint**
-- **Async context propagation** across service boundaries
+## Advantages vs alternatives
 
-## 🔑 Why Choose This Library
+Compared with request-scoped providers in NestJS:
 
-### 🚀 Performance
-- **10x+ faster** than request-scoped providers (benchmarks prove it)
-- **Zero runtime overhead** - no decorator or proxy cost
-- **Minimal memory usage** - single instance per application
-- **Async-safe** - context preserved across async/await boundaries
+- No per-request provider instantiation
+- No request-scope DI graph rebuild
+- Lower memory churn on high traffic
+- Simpler migration path for existing singleton services
 
-### 🔒 Type-Safe API
-- **Fully typed** TypeScript API with `ContextKey<T>` for type-safe store access
-- **No `any` types** - strict TypeScript configuration enforced
-- **Compiler-friendly** - autocomplete and type checking work perfectly
+Compared with generic context helpers (without NestJS integration):
 
-### 🎯 Works with Both Platforms
-- **Express** - 100% compatible with ExpressAdapter
-- **Fastify** - middleware pattern works with FastifyAdapter
-- **Unified API** - same API for both adapters
+- Native decorator and module integration for NestJS
+- Unified adapter behavior for Express and Fastify
+- Ready-to-use defaults for request id propagation and access
 
-### ✅ Production-Ready
-- **100% test coverage** - 308 tests prove reliability
-- **Battle-tested** - used in production by Pas7 team
-- **Well-documented** - comprehensive guides and examples
-- **Stable API** - SemVer with changesets
+## Measured overhead and memory
 
-## 📦 Quick Start
-
-### Express
+Benchmark command:
 
 ```bash
-pnpm add @pas7/nestjs-request-context @pas7/nestjs-request-context-adapter-express
+pnpm bench:request-context
 ```
 
-```typescript
-import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { RequestContextModule } from '@pas7/nestjs-request-context';
-import { requestContextMiddleware } from '@pas7/nestjs-request-context-adapter-express';
+Last measured on **February 14, 2026** (local machine):
 
-@Module({
-  imports: [RequestContextModule.forRoot()],
-  controllers: [YourController],
-})
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(requestContextMiddleware()).forRoutes('*');
-  }
-}
-```
+- Node.js: `v24.6.0`
+- CPU: `Intel(R) Core(TM) i9-14900K`
+- Load profile: `3000 requests`, concurrency `30`, warmup `300`, memory phase `6000 requests`, `5 rounds`, median reported
 
-### Fastify
+| Scenario                       | Median total time | Median throughput | Median avg/request | Median peak heap delta | Median retained heap | Median RSS delta |
+| ------------------------------ | ----------------: | ----------------: | -----------------: | ---------------------: | -------------------: | ---------------: |
+| Request-scoped provider        |      `4423.02 ms` |    `678.27 req/s` |       `1474.34 us` |             `59.71 MB` |            `0.13 MB` |        `0.95 MB` |
+| `@pas7/nestjs-request-context` |      `4297.86 ms` |    `698.02 req/s` |       `1432.62 us` |             `53.61 MB` |           `-0.01 MB` |        `0.55 MB` |
+| `nestjs-cls`                   |      `4989.55 ms` |    `601.26 req/s` |       `1663.18 us` |             `54.96 MB` |           `-0.08 MB` |        `1.83 MB` |
 
-```bash
-pnpm add @pas7/nestjs-request-context @pas7/nestjs-request-context-adapter-fastify
-```
+Interpretation for this profile:
 
-```typescript
-import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { RequestContextModule } from '@pas7/nestjs-request-context';
-import { requestContextMiddleware } from '@pas7/nestjs-request-context-adapter-fastify';
+- vs request-scoped provider: near parity, with `@pas7/nestjs-request-context` about `1.03x` faster (`2.83%` less total time)
+- vs `nestjs-cls`: `@pas7/nestjs-request-context` about `1.16x` faster (`13.86%` less total time)
+- Peak heap is lower than request-scoped baseline (about `10.21%` lower)
+- Practical conclusion: the library is primarily a DX/architecture improvement and stays performance-competitive under this benchmark profile
 
-@Module({
-  imports: [RequestContextModule.forRoot()],
-  controllers: [YourController],
-})
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(requestContextMiddleware()).forRoutes('*');
-  }
-}
-```
+Notes:
 
-## 🔑 Key Features
+- These are real local numbers from the benchmark script in `scripts/benchmark/request-context-vs-request-scoped.cjs`.
+- The command runs Node with `--expose-gc` to make memory deltas measurable.
+- Results depend on Node version, hardware, request complexity, and DI graph depth. Re-run the command in your environment before making capacity decisions.
+- Script scenarios currently include: native request-scoped provider, `@pas7/nestjs-request-context`, and `nestjs-cls`.
 
-- 🔒 **Type-safe** - Fully typed API with `ContextKey<T>`
-- ⚡ **Zero-overhead** - No per-request instances, 10x+ faster than request-scoped providers
-- 🎯 **Works with Express & Fastify** - Unified API for both platforms
-- ✅ **100% test coverage** - 308 tests prove reliability
-- 🚀 **Production-ready** - Battle-tested in production
-- 🔧 **Testkit included** - Easy testing with parallel request validation
-- 📚 **Comprehensive docs** - Quickstarts, API reference, and examples
+## What you install
 
-## 📚 Documentation
+| Package                                        | Purpose                                                      |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| `@pas7/nestjs-request-context`                 | Main NestJS module, decorators, service                      |
+| `@pas7/nestjs-request-context-adapter-express` | Middleware/interceptor integration for ExpressAdapter        |
+| `@pas7/nestjs-request-context-adapter-fastify` | Middleware/interceptor integration for FastifyAdapter        |
+| `@pas7/request-context-core`                   | Framework-agnostic core primitives                           |
+| `@pas7/nestjs-request-context-shared`          | Shared adapter types/factory (usually transitive dependency) |
+| `@pas7/nestjs-request-context-testkit`         | Helpers for isolation and leak testing                       |
 
-- [Quickstart (Express)](#quickstart-express)
-- [Quickstart (Fastify)](#quickstart-fastify)
-- [Why Not Request-Scoped Providers](#why-not-request-scoped-providers)
-- [API Reference](#api-reference)
-- [Testing](#testing)
-- [Examples](#examples)
+## Installation
 
-## 🚀 Installation
+Install the main package and one adapter.
 
 ```bash
 pnpm add @pas7/nestjs-request-context
-```
 
-Then install the appropriate adapter:
-
-```bash
-# For Express
+# choose one adapter
 pnpm add @pas7/nestjs-request-context-adapter-express
-
-# For Fastify
+# or
 pnpm add @pas7/nestjs-request-context-adapter-fastify
 ```
 
-## 📊 Benchmarks
+## Quick start (Express)
 
-Performance comparison (10,000 requests):
-
-| Approach | Time | Memory | Overhead |
-|----------|------|--------|----------|
-| Request-scoped providers | 2,340ms | 125MB | High |
-| @pas7/nestjs-request-context | **234ms** | **12MB** | **10x faster** |
-
-*Measured on Node.js v20 with 10,000 parallel requests*
-
-## 🏗️ Architecture
-
-```
-┌─────────────────────────────────────────────┐
-│           HTTP Request                  │
-│           (Express/Fastify)               │
-└────────────┬────────────────────────────┘
-             │
-             ▼
-┌───────────────────────────────────────┐
-│     Middleware / Plugin                │
-│     (Starts context with run())        │
-└────────────┬──────────────────────────┘
-             │
-             ▼
-┌───────────────────────────────────────┐
-│     AsyncLocalStorage                 │
-│     (Zero-overhead storage)           │
-└────────────┬──────────────────────────┘
-             │
-             ▼
-┌───────────────────────────────────────┐
-│     NestJS Application               │
-│     (Access context with get/set)      │
-└───────────────────────────────────────┘
-```
-
-## 💡 Common Use Cases
-
-### Request ID Tracking
-Track request IDs throughout your application for debugging and observability:
-
-```typescript
-@Get('/api/users/:id')
-getUser(@Ctx(REQUEST_ID_KEY) requestId: string, @Param('id') id: string) {
-  console.log(`Request ${requestId}: Fetching user ${id}`);
-  // ... fetch user logic
-}
-```
-
-### User Context Storage
-Store user information without request-scoped providers:
-
-```typescript
-const USER_KEY = new ContextKey<User>('user');
-
-@Post('/api/auth/login')
-login(@Body() credentials: LoginDto, @Ctx() store: Record<string, unknown>) {
-  const user = await this.authService.login(credentials);
-  set(USER_KEY, user);
-  return { success: true };
-}
-
-@Get('/api/me')
-getMe(@Ctx(USER_KEY) user: User) {
-  return user;
-}
-```
-
-### Distributed Tracing
-Combine with distributed tracing systems:
-
-```typescript
-import { getTraceContext } from '@pas7/nestjs-request-context';
-
-@Get('/api/orders/:id')
-getOrder(@Ctx(REQUEST_ID_KEY) requestId: string, @Param('id') id: string) {
-  const traceId = getTraceContext().traceId;
-  // ... business logic
-
-  // Send to downstream service with trace context
-  await this.orderService.get(id, { traceId });
-}
-```
-
-## Quickstart (Fastify)
-
-### 1. Install dependencies
-
-```bash
-pnpm add @pas7/nestjs-request-context @pas7/nestjs-request-context-adapter-fastify
-```
-
-### 2. Configure module
-
-```typescript
-import { Module } from '@nestjs/common';
+```ts
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { RequestContextModule } from '@pas7/nestjs-request-context';
-
-@Module({
-  imports: [
-    RequestContextModule.forRoot({
-      mode: 'standard', // minimal | standard
-    }),
-  ],
-})
-export class AppModule {}
-```
-
-### 3. Apply middleware
-
-```typescript
-import { requestContextMiddleware } from '@pas7/nestjs-request-context-adapter-fastify';
-
-@Module({
-  // ...
-})
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(requestContextMiddleware()).forRoutes('*');
-  }
-}
-```
-
-### 4. Use in controllers
-
-```typescript
-import { Ctx } from '@pas7/nestjs-request-context';
-import { REQUEST_ID_KEY } from '@pas7/nestjs-request-context';
-
-@Controller()
-export class YourController {
-  @Get()
-  getRequestId(@Ctx(REQUEST_ID_KEY) requestId: string) {
-    return { requestId };
-  }
-}
-```
-
-## Quickstart (Express)
-
-### 1. Install dependencies
-
-```bash
-pnpm add @pas7/nestjs-request-context @pas7/nestjs-request-context-adapter-express
-```
-
-### 2. Configure module
-
-```typescript
-import { Module } from '@nestjs/common';
-import { RequestContextModule } from '@pas7/nestjs-request-context';
-
-@Module({
-  imports: [
-    RequestContextModule.forRoot({
-      mode: 'standard', // minimal | standard
-    }),
-  ],
-})
-export class AppModule {}
-```
-
-### 3. Apply middleware
-
-```typescript
 import { requestContextMiddleware } from '@pas7/nestjs-request-context-adapter-express';
 
 @Module({
-  // ...
+  imports: [RequestContextModule.forRoot({ mode: 'standard' })],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
@@ -334,55 +136,15 @@ export class AppModule {
 }
 ```
 
-### 4. Use in controllers
+## Quick start (Fastify)
 
-```typescript
-import { Ctx } from '@pas7/nestjs-request-context';
-import { REQUEST_ID_KEY } from '@pas7/nestjs-request-context';
-
-@Controller()
-export class YourController {
-  @Get()
-  getRequestId(@Ctx(REQUEST_ID_KEY) requestId: string) {
-    return { requestId };
-  }
-}
-```
-
-## Why Not Request-Scoped Providers?
-
-Request-scoped providers in NestJS come with significant performance overhead:
-
-1. **Instance creation** - New instance created for every request
-2. **Dependency injection overhead** - DI container lookup for every dependency
-3. **Memory allocation** - Additional memory pressure
-4. **Startup time** - Slower initialization
-
-This library uses **AsyncLocalStorage** (Node.js built-in) which provides:
-- ✅ Zero per-request instance creation
-- ✅ No DI container overhead
-- ✅ Minimal memory allocation
-- ✅ Fast execution
-
-Benchmark results show 10x+ performance improvement over request-scoped providers.
-
-## Known Limitations
-
-See [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md) for information about Fastify adapter compatibility issues with AsyncLocalStorage.
-
-### Quick Summary
-
-- ✅ **NestJS + Express**: Full support, no limitations
-- ✅ **NestJS + Fastify (middleware pattern)**: Full support
-- ⚠️ **Fastify (non-NestJS)**: Limited support due to AsyncLocalStorage incompatibility with Fastify hooks
-
-For NestJS applications with FastifyAdapter, we recommend using the middleware pattern:
-
-```typescript
+```ts
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { RequestContextModule } from '@pas7/nestjs-request-context';
 import { requestContextMiddleware } from '@pas7/nestjs-request-context-adapter-fastify';
 
 @Module({
-  // ...
+  imports: [RequestContextModule.forRoot({ mode: 'standard' })],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
@@ -391,200 +153,76 @@ export class AppModule {
 }
 ```
 
-## API Reference
+## Architecture
 
-### RequestContextModule.forRoot(options?)
+```text
+HTTP Request (Express/Fastify)
+          |
+          v
+Adapter Middleware / Interceptor
+          |
+          v
+AsyncLocalStorage Context (run/get/set)
+          |
+          v
+NestJS Layer (Controller/Service/Guard)
+          |
+          v
+Typed Access via @Ctx() / RequestContextService
+```
 
-```typescript
-interface RequestContextModuleOptions {
-  header?: string; // default: 'x-request-id'
-  idGenerator?: () => string; // default: crypto.randomUUID
-  mode?: 'minimal' | 'standard'; // default: 'minimal'
-  useGlobalInterceptor?: boolean; // default: true
-  keys?: {
-    requestId?: string; // default: 'requestId'
-    route?: string; // default: 'route'
-    method?: string; // default: 'method'
-    ip?: string; // default: undefined
-  };
+## Using context in handlers
+
+```ts
+import { Controller, Get } from '@nestjs/common';
+import { Ctx, REQUEST_ID_KEY } from '@pas7/nestjs-request-context';
+
+@Controller()
+export class AppController {
+  @Get('/health')
+  health(@Ctx(REQUEST_ID_KEY) requestId: string) {
+    return { ok: true, requestId };
+  }
 }
 ```
 
-#### useGlobalInterceptor Option
+## API overview
 
-By default, the module automatically registers a global interceptor. Set `useGlobalInterceptor: false` to disable this behavior:
+Main exports from `@pas7/nestjs-request-context`:
 
-```typescript
-@Module({
-  imports: [
-    RequestContextModule.forRoot({
-      mode: 'standard',
-      useGlobalInterceptor: false, // Disable auto-registration
-    }),
-  ],
-  providers: [
-    // Register your own interceptor if needed
-    {
-      provide: 'APP_INTERCEPTOR',
-      useClass: CustomContextInterceptor,
-    },
-  ],
-})
-export class AppModule {}
+- `RequestContextModule.forRoot()` / `forRootAsync()`
+- `RequestContextService`
+- `@Ctx()` decorator
+- `REQUEST_ID_KEY`, `ROUTE_KEY`, `METHOD_KEY`, `IP_KEY`
+- `ContextInterceptor`, `ContextGuard`
+
+Core exports from `@pas7/request-context-core`:
+
+- `run`, `get`, `set`, `has`, `require`, `merge`
+- `snapshot`, `restore`
+- `Context`, `ContextKey`
+- `KeyExistsError`, `ContextMissingError`, `ContextNotActiveError`, `ContextKeyCollisionError`
+
+## Known limitations
+
+See `KNOWN_LIMITATIONS.md` for framework-specific notes.
+
+## Documentation and examples
+
+- Root docs: `README.md`
+- Changelog: `CHANGELOG.md`
+- Examples: `examples/express-app` and `examples/fastify-app`
+- Package docs: `packages/nest/README.md`, `packages/adapter-express/README.md`, `packages/adapter-fastify/README.md`, `packages/core/README.md`, `packages/shared/README.md`, `packages/testkit/README.md`
+
+## Development
+
+```bash
+pnpm install
+pnpm build
+pnpm test
+pnpm test:e2e
 ```
 
-Or with `forRootAsync()`:
+## License
 
-```typescript
-@Module({
-  imports: [
-    RequestContextModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        mode: config.get('REQUEST_CONTEXT_MODE'),
-        useGlobalInterceptor: false,
-      }),
-    }),
-  ],
-})
-export class AppModule {}
-```
-
-### @Ctx(key?)
-
-Decorator to inject context data:
-
-- `@Ctx()` - Returns full store as `Record<string, unknown>`
-- `@Ctx(REQUEST_ID_KEY)` - Returns typed value for key
-
-### RequestContextService
-
-Static service for context access:
-
-```typescript
-RequestContextService.get<T>(key: ContextKey<T>): T | undefined;
-RequestContextService.set<T>(key: ContextKey<T>, value: T): void;
-RequestContextService.has<T>(key: ContextKey<T>): boolean;
-RequestContextService.require<T>(key: ContextKey<T>): T;
-
-// Convenience methods
-RequestContextService.getRequestId(): string | undefined;
-RequestContextService.getRoute(): string | undefined;
-RequestContextService.getMethod(): string | undefined;
-```
-
-### Context Class
-
-Core context management class:
-
-```typescript
-// Get current active context
-Context.current(): Context | undefined;
-
-// Instance methods
-context.get<T>(key: ContextKey<T>): T | undefined;
-context.set<T>(key: ContextKey<T>, value: T, policy?: 'overwrite' | 'deny' | 'ignore'): void;
-context.has<T>(key: ContextKey<T>): boolean;
-context.require<T>(key: ContextKey<T>): T;
-context.merge(data: Record<string, unknown>, policy?: SetPolicy): void;
-
-// Snapshot & Restore (uses structuredClone for deep copy)
-context.snapshot(): ContextSnapshot;
-context.restore(snapshot: ContextSnapshot): void;
-
-// Explicit cleanup (v0.2.0+)
-context.clear(): void;
-
-// Run function within context
-context.run<T>(fn: () => T): T;
-```
-
-#### Context Snapshot & Restore
-
-The `snapshot()` method uses `structuredClone` for deep copy, preventing mutation of nested objects:
-
-```typescript
-// Take a snapshot
-const snapshot = context.snapshot();
-
-// ... modifications happen ...
-
-// Restore to previous state (creates new internal store to avoid memory leaks)
-context.restore(snapshot);
-```
-
-#### Context Clear
-
-Use `clear()` for explicit cleanup after request completion:
-
-```typescript
-// Clear all data from context
-context.clear();
-```
-
-## Packages
-
-### Core
-`@pas7/request-context-core` - Core context management with AsyncLocalStorage
-
-### NestJS
-`@pas7/nestjs-request-context` - NestJS integration with decorators & interceptors
-
-### Fastify Adapter
-`@pas7/nestjs-request-context-adapter-fastify` - Fastify middleware for context initialization
-
-### Express Adapter
-`@pas7/nestjs-request-context-adapter-express` - Express middleware for context initialization
-
-### Testkit
-`@pas7/nestjs-request-context-testkit` - Testing utilities for context validation
-
-## Testing
-
-### Using Testkit
-
-```typescript
-import { createTestAppFastify, runParallelRequests, assertNoLeak } from '@pas7/nestjs-request-context-testkit';
-
-describe('Context isolation', () => {
-  let app: NestApplication;
-
-  beforeAll(async () => {
-    const testApp = await createTestAppFastify({
-      module: {
-        controllers: [TestController],
-      },
-    });
-    app = testApp.app;
-  });
-
-  it('should not leak context between requests', async () => {
-    const results = await runParallelRequests(100, async (i) => {
-      return await request(app.getHttpServer())
-        .get(`/test/${i}`)
-        .expect(200);
-    });
-
-    assertNoLeak(results.map((r) => r.body));
-  });
-});
-```
-
-## Examples
-
-See [examples/](examples/) directory for complete examples:
-- [Fastify App](examples/fastify-app/)
-- [Express App](examples/express-app/)
-
-## 🤝 Contributing
-
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## 📄 License
-
-[Apache-2.0](LICENSE)
-
----
-
-**Keywords:** nestjs, request-context, asynclocalstorage, performance, context-management, typescript, nestjs-module, express, fastify, request-scoped-alternative, zero-overhead, distributed-tracing
+Apache-2.0

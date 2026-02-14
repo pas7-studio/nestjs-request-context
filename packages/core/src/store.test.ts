@@ -4,6 +4,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { Store, createEmptyStore } from './store.js';
+import { KeyExistsError } from './key-exists-error.js';
 
 describe('Store', () => {
   it('should create an empty store without prototype', () => {
@@ -37,12 +38,24 @@ describe('Store', () => {
     expect(store.get<string>('key1')).toBe('value2');
   });
 
-  it('should throw error with deny policy when key exists', () => {
+  it('should throw KeyExistsError with deny policy when key exists', () => {
     const store = new Store();
     store.set('key1', 'value1', 'overwrite');
     expect(() => {
       store.set('key1', 'value2', 'deny');
-    }).toThrow('Key "key1" already exists in store');
+    }).toThrow(KeyExistsError);
+  });
+
+  it('should throw KeyExistsError with correct key property', () => {
+    const store = new Store();
+    store.set('key1', 'value1', 'overwrite');
+    try {
+      store.set('key1', 'value2', 'deny');
+      expect.fail('Expected KeyExistsError to be thrown');
+    } catch (error) {
+      expect(error).toBeInstanceOf(KeyExistsError);
+      expect((error as KeyExistsError).key).toBe('key1');
+    }
   });
 
   it('should ignore with ignore policy when key exists', () => {
@@ -62,12 +75,12 @@ describe('Store', () => {
     expect(store.get<string>('key3')).toBe('value3');
   });
 
-  it('should merge data with deny policy', () => {
+  it('should throw KeyExistsError when merge with deny policy on existing key', () => {
     const store = new Store();
     store.set('key1', 'value1', 'overwrite');
     expect(() => {
       store.merge({ key1: 'new-value1', key2: 'value2' }, 'deny');
-    }).toThrow('Key "key1" already exists in store');
+    }).toThrow(KeyExistsError);
   });
 
   it('should merge data with ignore policy', () => {

@@ -3,6 +3,7 @@
  */
 
 import type { SetPolicy, Store as IStore } from './contracts.js';
+import { KeyExistsError } from './key-exists-error.js';
 
 /**
  * Creates an empty store without prototype
@@ -16,10 +17,10 @@ export function createEmptyStore(): IStore {
  * Internal Store class for managing context data
  */
 export class Store {
-  private readonly _store: Record<string, unknown>;
+  private _store: Record<string, unknown>;
 
   constructor() {
-    this._store = createEmptyStore() as Record<string, unknown>;
+    this._store = createEmptyStore();
   }
 
   /**
@@ -32,15 +33,15 @@ export class Store {
     if (key in this._store) {
       switch (policy) {
         case 'deny':
-          throw new Error(`Key "${key}" already exists in store`);
+          throw new KeyExistsError(key);
         case 'ignore':
           return;
         case 'overwrite':
-          (this._store as Record<string, unknown>)[key] = value;
+          this._store[key] = value;
           break;
       }
     } else {
-      (this._store as Record<string, unknown>)[key] = value;
+      this._store[key] = value;
     }
   }
 
@@ -87,7 +88,7 @@ export class Store {
    * @param data - The new data for the store
    */
   reset(data: Record<string, unknown> = {}): void {
-    (this as { _store: Record<string, unknown> })._store = createEmptyStore();
+    this._store = createEmptyStore();
     Object.assign(this._store, data);
   }
 
@@ -96,6 +97,6 @@ export class Store {
    * Creates a new empty store object to avoid memory leaks
    */
   clear(): void {
-    (this as { _store: Record<string, unknown> })._store = createEmptyStore();
+    this._store = createEmptyStore();
   }
 }

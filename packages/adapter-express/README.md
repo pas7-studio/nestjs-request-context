@@ -1,9 +1,10 @@
 # @pas7/nestjs-request-context-adapter-express
 
-[![npm version](https://img.shields.io/npm/v/@pas7/nestjs-request-context-adapter-express?style=flat-square)](https://www.npmjs.com/package/@pas7/nestjs-request-context-adapter-express)
-[![License](https://img.shields.io/github/license/pas7-studio/nestjs-request-context?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/blob/main/LICENSE)
-
 Express adapter for `@pas7/nestjs-request-context`.
+
+## When to use
+
+Use this package when your NestJS app runs on `@nestjs/platform-express`.
 
 ## Installation
 
@@ -11,9 +12,9 @@ Express adapter for `@pas7/nestjs-request-context`.
 pnpm add @pas7/nestjs-request-context @pas7/nestjs-request-context-adapter-express
 ```
 
-## Quick Start
+## Quick example
 
-```typescript
+```ts
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { requestContextMiddleware } from '@pas7/nestjs-request-context-adapter-express';
 
@@ -29,7 +30,7 @@ export class AppModule {
 
 ## Options
 
-```typescript
+```ts
 interface RequestContextExpressOptions {
   header?: string;
   idGenerator?: () => string;
@@ -37,20 +38,18 @@ interface RequestContextExpressOptions {
 }
 ```
 
-## Related Packages
+## Exports
 
-- Main module: [`@pas7/nestjs-request-context`](https://www.npmjs.com/package/@pas7/nestjs-request-context)
-- Core primitives: [`@pas7/request-context-core`](https://www.npmjs.com/package/@pas7/request-context-core)
+- `requestContextMiddleware`
+- `UseRequestContextExpress`
+- `DEFAULT_EXPRESS_OPTIONS`
+- `RequestContextExpressOptions`
 
-## Links
+## Related
 
-- Repository: https://github.com/pas7-studio/nestjs-request-context
-- Package source: https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/adapter-express
-- Full docs: https://github.com/pas7-studio/nestjs-request-context#readme
-
-## Versioning
-
-Versions are managed in the monorepo via Changesets (SemVer).
+- Root docs: `README.md`
+- Changelog: `CHANGELOG.md`
+- Main package: `@pas7/nestjs-request-context`
 
 ## License
 

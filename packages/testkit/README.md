@@ -1,9 +1,10 @@
 # @pas7/nestjs-request-context-testkit
 
-[![npm version](https://img.shields.io/npm/v/@pas7/nestjs-request-context-testkit?style=flat-square)](https://www.npmjs.com/package/@pas7/nestjs-request-context-testkit)
-[![License](https://img.shields.io/github/license/pas7-studio/nestjs-request-context?style=flat-square)](https://github.com/pas7-studio/nestjs-request-context/blob/main/LICENSE)
+Test utilities for validating request-context isolation and concurrency behavior.
 
-Testing utilities for `@pas7/nestjs-request-context`.
+## When to use
+
+Use this package in integration/e2e tests to assert there is no context leak across parallel requests.
 
 ## Installation
 
@@ -11,10 +12,14 @@ Testing utilities for `@pas7/nestjs-request-context`.
 pnpm add -D @pas7/nestjs-request-context-testkit
 ```
 
-## Usage
+## Quick example
 
-```typescript
-import { assertNoLeak, createTestAppFastify, runParallelRequests } from '@pas7/nestjs-request-context-testkit';
+```ts
+import {
+  assertNoLeak,
+  createTestAppFastify,
+  runParallelRequests,
+} from '@pas7/nestjs-request-context-testkit';
 
 const testApp = await createTestAppFastify({
   module: { controllers: [TestController] },
@@ -27,28 +32,19 @@ const responses = await runParallelRequests(50, (i) =>
 assertNoLeak(responses.map((r) => r.body));
 ```
 
-## API
+## Exports
 
-- `createTestAppFastify(options?)`
-- `createTestAppExpress(options?)`
-- `runParallelRequests(count, handler)`
-- `assertNoLeak(results)`
+- `createTestAppFastify`
+- `createTestAppExpress`
+- `runParallelRequests`
+- `assertNoLeak`
+- `ContextLeakError`
 
-## Related Packages
+## Related
 
-- Main module: [`@pas7/nestjs-request-context`](https://www.npmjs.com/package/@pas7/nestjs-request-context)
-- Express adapter: [`@pas7/nestjs-request-context-adapter-express`](https://www.npmjs.com/package/@pas7/nestjs-request-context-adapter-express)
-- Fastify adapter: [`@pas7/nestjs-request-context-adapter-fastify`](https://www.npmjs.com/package/@pas7/nestjs-request-context-adapter-fastify)
-
-## Links
-
-- Repository: https://github.com/pas7-studio/nestjs-request-context
-- Package source: https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/testkit
-- Full docs: https://github.com/pas7-studio/nestjs-request-context#readme
-
-## Versioning
-
-Versions are managed in the monorepo via Changesets (SemVer).
+- Root docs: `README.md`
+- Changelog: `CHANGELOG.md`
+- Main package: `@pas7/nestjs-request-context`
 
 ## License
 
