@@ -1,7 +1,11 @@
 {
   "name": "@pas7/nestjs-request-context-shared",
-  "version": "0.3.6",
+  "version": "0.3.8",
   "description": "Shared types and utilities for @pas7/nestjs-request-context adapters",
+  "author": {
+    "name": "PAS7",
+    "url": "https://pas7.com.ua/"
+  },
   "homepage": "https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/shared",
   "repository": {
     "type": "git",

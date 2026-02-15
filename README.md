@@ -224,6 +224,14 @@ pnpm test
 pnpm test:e2e
 ```
 
+## About the authors
+
+This package is developed and maintained by **PAS7** - a software development company.
+
+- 🌐 Company website: [https://pas7.com.ua/](https://pas7.com.ua/)
+- 📧 Contact us: [https://pas7.com.ua/contact](https://pas7.com.ua/contact)
+- 📖 Read our article about this package: [NestJS Request Context with ALS](https://pas7.com.ua/blog/en/nestjs-request-context-als-2026)
+
 ## License
 
 Apache-2.0

@@ -1,7 +1,11 @@
 {
   "name": "@pas7/request-context-core",
-  "version": "0.3.6",
+  "version": "0.3.8",
   "description": "Core request context management library",
+  "author": {
+    "name": "PAS7",
+    "url": "https://pas7.com.ua/"
+  },
   "homepage": "https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/core",
   "repository": {
     "type": "git",

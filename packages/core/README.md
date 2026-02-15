@@ -38,6 +38,13 @@ run({ requestId: 'req-1' }, () => {
 - Changelog: `CHANGELOG.md`
 - NestJS module: `@pas7/nestjs-request-context`
 
+## About
+
+Developed by **PAS7** - [https://pas7.com.ua/](https://pas7.com.ua/)
+
+- 📖 Article: [NestJS Request Context with ALS](https://pas7.com.ua/blog/en/nestjs-request-context-als-2026)
+- 📧 Contact: [https://pas7.com.ua/contact](https://pas7.com.ua/contact)
+
 ## License
 
 Apache-2.0

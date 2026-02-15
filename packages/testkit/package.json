@@ -1,7 +1,11 @@
 {
   "name": "@pas7/nestjs-request-context-testkit",
-  "version": "0.3.6",
+  "version": "0.3.8",
   "description": "Testing utilities for NestJS request context",
+  "author": {
+    "name": "PAS7",
+    "url": "https://pas7.com.ua/"
+  },
   "homepage": "https://github.com/pas7-studio/nestjs-request-context/tree/main/packages/testkit",
   "repository": {
     "type": "git",

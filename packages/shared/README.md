@@ -42,6 +42,13 @@ const interceptor = createRequestContextInterceptor({
 - Express adapter: `@pas7/nestjs-request-context-adapter-express`
 - Fastify adapter: `@pas7/nestjs-request-context-adapter-fastify`
 
+## About
+
+Developed by **PAS7** - [https://pas7.com.ua/](https://pas7.com.ua/)
+
+- 📖 Article: [NestJS Request Context with ALS](https://pas7.com.ua/blog/en/nestjs-request-context-als-2026)
+- 📧 Contact: [https://pas7.com.ua/contact](https://pas7.com.ua/contact)
+
 ## License
 
 Apache-2.0
